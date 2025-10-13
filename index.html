@@ -14,105 +14,61 @@
             padding: 20px;
             margin: 0;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .content {
             max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            padding: 40px;
         }
 
         h1 {
             color: #c41e3a;
-            font-size: 2.8em;
+            font-size: 3em;
             margin-bottom: 30px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
 
         .description {
             color: #2c5530;
-            font-size: 1.2em;
+            font-size: 1.4em;
             line-height: 1.6;
-            margin: 30px 0;
+            margin: 40px 0;
             text-align: center;
             background: rgba(196, 30, 58, 0.1);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #c41e3a;
+            padding: 30px;
+            border-radius: 20px;
+            border-left: 5px solid #c41e3a;
             backdrop-filter: blur(5px);
         }
 
-        .form-group {
-            margin: 25px 0;
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: #c41e3a;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        input, textarea {
-            width: 80%;
-            max-width: 400px;
-            padding: 15px;
-            border: 2px solid #90c695;
-            border-radius: 10px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #c41e3a;
-            outline: none;
-            box-shadow: 0 0 12px rgba(196, 30, 58, 0.3);
-            transform: scale(1.02);
-        }
-
-        textarea {
-            height: 150px;
-            resize: vertical;
-        }
-
-        .send-button {
+        .mail-button {
             background: linear-gradient(45deg, #90c695, #c41e3a);
             color: white;
-            padding: 18px 50px;
+            padding: 25px 60px;
             border: none;
-            border-radius: 30px;
-            font-size: 1.3em;
+            border-radius: 35px;
+            font-size: 1.8em;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 25px;
+            margin: 30px 0;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .send-button:hover {
+        .mail-button:hover {
             background: linear-gradient(45deg, #c41e3a, #90c695);
-            transform: scale(1.08);
-            box-shadow: 0 8px 25px rgba(144, 198, 149, 0.5);
-        }
-
-        .success-message {
-            display: none;
-            background: #90c695;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-weight: bold;
-            font-size: 1.2em;
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(144, 198, 149, 0.6);
         }
 
         .snowflake {
             color: #a8d5e2;
-            font-size: 18px;
+            font-size: 20px;
             position: fixed;
             top: -20px;
             animation: fall linear infinite;
@@ -160,38 +116,12 @@
             Можно со ссылками
         </div>
         
-        <div class="success-message" id="successMessage">
-            ✅ Письмо отправлено! Дед Мороз уже читает твое письмо! 🎅
-        </div>
-        
-        <!-- ФОРМА С ТВОЕЙ ПОЧТОЙ -->
-        <form action="https://formspree.io/f/mvgnwjyk" method="POST">
-            <input type="hidden" name="_replyto" value="kanda-yuoo@yandex.ru">
-            <input type="hidden" name="_subject" value="🎅 Письмо Деду Морозу">
-            
-            <div class="form-group">
-                <label>Твое имя:</label>
-                <input type="text" name="name" placeholder="Как тебя зовут?" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Твое письмо:</label>
-                <textarea name="message" placeholder="Напиши здесь свое письмо Дедушке Морозу!" required></textarea>
-            </div>
-            
-            <button type="submit" class="send-button">📮 Написать письмо</button>
-        </form>
+        <a href="mailto:deadmorozzz3000@yandex.ru?subject=Письмо Деду Морозу&body=Дорогой Дедушка Мороз!%0D%0A%0D%0A[Напиши здесь свое письмо]%0D%0A%0D%0AМожно добавлять ссылки и рассказывать о своих желаниях!%0D%0A%0D%0AС любовью," class="mail-button">
+            📮 НАПИСАТЬ ПИСЬМО
+        </a>
     </div>
 
     <script>
-        // Показываем сообщение об успехе
-        if (window.location.search.includes('submission=success')) {
-            document.getElementById('successMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 5000);
-        }
-
         // Снежинки
         function createSnowflake() {
             const snowflake = document.createElement('div');
@@ -200,7 +130,7 @@
             snowflake.style.left = Math.random() * 100 + 'vw';
             snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
             snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-            snowflake.style.fontSize = (Math.random() * 8 + 12) + 'px';
+            snowflake.style.fontSize = (Math.random() * 10 + 15) + 'px';
             document.body.appendChild(snowflake);
             
             setTimeout(() => {
@@ -227,8 +157,8 @@
             return colors[Math.floor(Math.random() * colors.length)];
         }
         
-        setInterval(createSnowflake, 200);
-        setInterval(createFirework, 800);
+        setInterval(createSnowflake, 150);
+        setInterval(createFirework, 700);
     </script>
 </body>
 </html>
