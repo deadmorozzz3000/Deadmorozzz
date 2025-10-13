@@ -99,43 +99,15 @@
             box-shadow: 0 8px 25px rgba(144, 198, 149, 0.5);
         }
 
-        .snowflake {
-            color: #a8d5e2;
-            font-size: 18px;
-            position: fixed;
-            top: -20px;
-            animation: fall linear infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes fall {
-            to { 
-                transform: translateY(100vh) rotate(360deg); 
-            }
-        }
-
-        .firework {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: #c41e3a;
-            border-radius: 50%;
-            animation: explode 1.5s ease-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes explode {
-            0% {
-                transform: translateY(100vh) scale(1);
-                opacity: 1;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) scale(8);
-                opacity: 0;
-            }
+        .success-message {
+            display: none;
+            background: #90c695;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 1.2em;
         }
     </style>
 </head>
@@ -149,7 +121,12 @@
             Можно со ссылками
         </div>
         
-        <form action="https://formsubmit.co/kanda-yuoo@yandex.ru" method="POST">
+        <div class="success-message" id="successMessage">
+            ✅ Письмо отправлено! Дед Мороз уже читает твое письмо! 🎅
+        </div>
+        
+        <!-- ФОРМА С РАБОЧИМ FORMSPREE -->
+        <form action="https://formspree.io/f/mvgnwjyk" method="POST">
             <div class="form-group">
                 <label>Твое имя:</label>
                 <input type="text" name="name" placeholder="Как тебя зовут?" required>
@@ -157,54 +134,23 @@
             
             <div class="form-group">
                 <label>Твое письмо:</label>
-                <textarea name="message" placeholder="Напиши здесь свое письмо Дедушке Морозу. Можно вставлять ссылки!" required></textarea>
+                <textarea name="message" placeholder="Напиши здесь свое письмо Дедушке Морозу!" required></textarea>
             </div>
             
-            <input type="hidden" name="_subject" value="Новое письмо Дедушке Морозу!">
-            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_subject" value="🎅 Новое письмо Деду Морозу!">
             
             <button type="submit" class="send-button">📮 Написать письмо</button>
         </form>
     </div>
 
     <script>
-        // Снежинки
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.innerHTML = '❄';
-            snowflake.classList.add('snowflake');
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-            snowflake.style.fontSize = (Math.random() * 8 + 12) + 'px';
-            document.body.appendChild(snowflake);
-            
+        // Показываем сообщение об успехе если в URL есть success
+        if (window.location.search.includes('submission=success')) {
+            document.getElementById('successMessage').style.display = 'block';
             setTimeout(() => {
-                snowflake.remove();
+                document.getElementById('successMessage').style.display = 'none';
             }, 5000);
         }
-
-        // Салюты в цветах твоей палитры
-        function createFirework() {
-            const firework = document.createElement('div');
-            firework.classList.add('firework');
-            firework.style.left = Math.random() * 100 + 'vw';
-            firework.style.animationDelay = Math.random() * 2 + 's';
-            firework.style.background = getRandomColor();
-            document.body.appendChild(firework);
-            
-            setTimeout(() => {
-                firework.remove();
-            }, 2000);
-        }
-
-        function getRandomColor() {
-            const colors = ['#c41e3a', '#90c695', '#a8d5e2', '#2c5530'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-        
-        setInterval(createSnowflake, 200);
-        setInterval(createFirework, 800);
     </script>
 </body>
 </html>
