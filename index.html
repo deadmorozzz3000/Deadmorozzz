@@ -76,7 +76,6 @@
             transform: scale(1.1);
         }
 
-        /* Стили для формы */
         .letter-form {
             display: none;
             background: rgba(255, 255, 255, 0.95);
@@ -186,8 +185,7 @@
             border: 1px solid #c41e3a;
         }
 
-        /* Кнопка подсказки Снегурочки */
-        .snowgirl-hint-button {
+        .secret-button {
             background: linear-gradient(45deg, #ffb6c1, #ff69b4);
             color: white;
             padding: 15px 30px;
@@ -202,13 +200,12 @@
             width: auto;
         }
 
-        .snowgirl-hint-button:hover {
+        .secret-button:hover {
             background: linear-gradient(45deg, #ff69b4, #ffb6c1);
             transform: scale(1.05);
         }
 
-        /* Кнопка возврата к Деду Морозу */
-        .santa-back-button {
+        .back-button {
             background: linear-gradient(45deg, #c41e3a, #2c5530);
             color: white;
             padding: 15px 30px;
@@ -223,23 +220,36 @@
             width: auto;
         }
 
-        .santa-back-button:hover {
+        .back-button:hover {
             background: linear-gradient(45deg, #2c5530, #c41e3a);
             transform: scale(1.05);
         }
 
-        .snowgirl-hint {
+        .hint-overlay {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hint-content {
             background: rgba(255, 255, 255, 0.95);
             padding: 25px;
             border-radius: 15px;
-            margin-top: 20px;
             text-align: center;
             border: 3px solid #ff69b4;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            max-width: 400px;
+            margin: 20px;
         }
 
-        .snowgirl-close-button {
+        .hint-close-button {
             background: #ff69b4;
             color: white;
             border: none;
@@ -248,10 +258,8 @@
             cursor: pointer;
             font-weight: bold;
             margin-top: 15px;
-            display: inline-block;
         }
 
-        /* РОЗОВЫЙ РЕЖИМ СНЕГУРОЧКИ */
         .snowgirl-mode {
             background: linear-gradient(135deg, #ffebf3, #ffe6f2, #ffd6e9) !important;
         }
@@ -316,10 +324,6 @@
             color: #b3005e !important;
         }
 
-        .snowgirl-mode .snowgirl-hint-button {
-            background: linear-gradient(45deg, #ff69b4, #ff1493) !important;
-        }
-
         .pink-confetti {
             position: fixed;
             font-size: 20px;
@@ -381,23 +385,25 @@
             ✅ Письмо отправлено! 🎅✨
         </div>
 
-        <!-- Кнопка подсказки Снегурочки -->
-        <button class="snowgirl-hint-button" id="snowgirlHintButton">
-            🎀 Секрет Снегурочки
+        <!-- Кнопка секрета -->
+        <button class="secret-button" id="secretButton">
+            🎀 Секрет
         </button>
 
-        <!-- Кнопка возврата к Деду Морозу -->
-        <button class="santa-back-button" id="santaBackButton">
+        <!-- Кнопка возврата -->
+        <button class="back-button" id="backButton">
             🎅 Вернуться к Деду Морозу
         </button>
 
-        <!-- Подсказка Снегурочки -->
-        <div class="snowgirl-hint" id="snowgirlHint">
-            <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
-                ✨ Для активации режима Снегурочки:<br>
-                👆 Быстро нажми 3 раза по заголовку!
+        <!-- Оверлей подсказки -->
+        <div class="hint-overlay" id="hintOverlay">
+            <div class="hint-content">
+                <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
+                    ✨ Тапни три раза на заголовок!<br>
+                    👆 Быстро нажми 3 раза по заголовку выше!
+                </div>
+                <button class="hint-close-button" id="hintCloseButton">Понятно!</button>
             </div>
-            <button class="snowgirl-close-button" id="snowgirlCloseButton">Понятно!</button>
         </div>
     </div>
 
@@ -440,6 +446,7 @@
             openFormButton.style.display = 'none';
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
+            closeHint(); // Закрываем подсказку при открытии формы
         });
 
         closeFormButton.addEventListener('click', function() {
@@ -508,19 +515,30 @@
             });
         });
 
-        // === ПОДСКАЗКА СНЕГУРОЧКИ ===
-        const snowgirlHintButton = document.getElementById('snowgirlHintButton');
-        const snowgirlHint = document.getElementById('snowgirlHint');
-        const snowgirlCloseButton = document.getElementById('snowgirlCloseButton');
+        // === ПОДСКАЗКА ===
+        const secretButton = document.getElementById('secretButton');
+        const backButton = document.getElementById('backButton');
+        const hintOverlay = document.getElementById('hintOverlay');
+        const hintCloseButton = document.getElementById('hintCloseButton');
 
-        snowgirlHintButton.addEventListener('click', function() {
-            snowgirlHint.style.display = 'block';
-            snowgirlHintButton.style.display = 'none';
+        // Функция закрытия подсказки
+        function closeHint() {
+            hintOverlay.style.display = 'none';
+        }
+
+        // Открытие подсказки
+        secretButton.addEventListener('click', function() {
+            hintOverlay.style.display = 'flex';
         });
 
-        snowgirlCloseButton.addEventListener('click', function() {
-            snowgirlHint.style.display = 'none';
-            snowgirlHintButton.style.display = 'inline-block';
+        // Закрытие подсказки по кнопке
+        hintCloseButton.addEventListener('click', closeHint);
+
+        // Закрытие подсказки по клику на оверлей
+        hintOverlay.addEventListener('click', function(e) {
+            if (e.target === hintOverlay) {
+                closeHint();
+            }
         });
 
         // === ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ ===
@@ -530,8 +548,6 @@
         
         const mainTitle = document.getElementById('mainTitle');
         const mainDescription = document.getElementById('mainDescription');
-        const snowgirlHintBtn = document.getElementById('snowgirlHintButton');
-        const santaBackButton = document.getElementById('santaBackButton');
 
         mainTitle.addEventListener('click', function() {
             const currentTime = new Date().getTime();
@@ -541,7 +557,7 @@
                 tapCount++;
                 
                 if (!isSnowgirlMode) {
-                    showMessage(`✨ ${tapCount}/3 для Снегурочки!`, '#ff69b4');
+                    showMessage(`✨ ${tapCount}/3 для секрета!`, '#ff69b4');
                 } else {
                     showMessage(`🎅 ${tapCount}/3 к Деду Морозу!`, '#c41e3a');
                 }
@@ -553,6 +569,7 @@
                         activateSantaMode();
                     }
                     tapCount = 0;
+                    closeHint(); // Закрываем подсказку при переключении режима
                 }
             } else {
                 tapCount = 1;
@@ -561,8 +578,9 @@
         });
 
         // Кнопка возврата к Деду Морозу
-        santaBackButton.addEventListener('click', function() {
+        backButton.addEventListener('click', function() {
             activateSantaMode();
+            closeHint(); // Закрываем подсказку
         });
 
         function activateSnowGirlMode() {
@@ -572,67 +590,17 @@
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
-            mainTitle.innerHTML = '🎀 Письмо самой милой 🦄';
+            mainTitle.innerHTML = '🎀 Письмо от самой милой 🦄';
             
             // Меняем описание
             mainDescription.innerHTML = '✨ Что хочешь получить в подарок от дедушки?<br><br>Напиши все свои самые сокровенные желания!<br><br>Не стесняйся мечтать! 💖';
             
-            // Прячем кнопку Снегурочки, показываем кнопку возврата
-            snowgirlHintBtn.style.display = 'none';
-            santaBackButton.style.display = 'inline-block';
+            // Прячем кнопку секрета, показываем кнопку возврата
+            secretButton.style.display = 'none';
+            backButton.style.display = 'inline-block';
             
             // Показываем сообщение
-            showMessage('🎀 Режим Снегурочки активирован! Все такое розовое и милое! 💖', '#ff69b4');
+            showMessage('🎀 Режим самой милой активирован! Все такое розовое и милое! 💖', '#ff69b4');
             
             // Добавляем конфетти
-            createPinkConfetti();
-        }
-
-        function activateSantaMode() {
-            isSnowgirlMode = false;
-            
-            // Выключаем розовую тему
-            document.body.classList.remove('snowgirl-mode');
-            
-            // Возвращаем заголовок
-            mainTitle.innerHTML = '✉️ Письмо для Дедушки Мороза';
-            
-            // Возвращаем описание
-            mainDescription.innerHTML = 'Дед уже старый, ленивый, за всеми детьми не уследишь<br><br>Поэтому нужно написать письмо дедушке<br><br>Можно со ссылками';
-            
-            // Показываем кнопку Снегурочки, прячем кнопку возврата
-            snowgirlHintBtn.style.display = 'inline-block';
-            santaBackButton.style.display = 'none';
-            
-            // Показываем сообщение
-            showMessage('🎅 Вернулись к Деду Морозу!', '#c41e3a');
-        }
-
-        function createPinkConfetti() {
-            const symbols = ['🎀', '✨', '🦄', '💖', '💝', '🌸', '🌺'];
-            const colors = ['#ff66b2', '#ff99cc', '#ff3385', '#ff69b4', '#ff1493'];
-            
-            for (let i = 0; i < 25; i++) {
-                const confetti = document.createElement('div');
-                confetti.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-                confetti.classList.add('pink-confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
-                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                confetti.style.opacity = Math.random() * 0.7 + 0.3;
-                
-                document.body.appendChild(confetti);
-                
-                setTimeout(() => {
-                    if (confetti.parentNode) {
-                        confetti.remove();
-                    }
-                }, 5000);
-            }
-        }
-
-        console.log('Сайт загружен! Переключай режимы по 3 тапа на заголовок');
-    </script>
-</body>
-</html>
+  
