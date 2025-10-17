@@ -104,6 +104,90 @@
                 opacity: 0;
             }
         }
+
+        /* Стили для формы */
+        .letter-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c5530;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #90c695;
+            border-radius: 10px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #c41e3a;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            background: linear-gradient(45deg, #90c695, #c41e3a);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(45deg, #c41e3a, #90c695);
+            transform: scale(1.05);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #c41e3a;
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(144, 198, 149, 0.9);
+            color: #2c5530;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -116,9 +200,31 @@
             Можно со ссылками
         </div>
         
-        <a href="mailto:deadmorozzz3000@yandex.ru?subject=Письмо Деду Морозу&body=Дорогой Дедушка Мороз!%0D%0A%0D%0A[Напиши здесь свое письмо]%0D%0A%0D%0AМожно добавлять ссылки и рассказывать о своих желаниях!%0D%0A%0D%0AС любовью," class="mail-button">
+        <a href="#" class="mail-button" id="openFormButton">
             📮 НАПИСАТЬ ПИСЬМО
         </a>
+
+        <!-- Форма для письма -->
+        <form class="letter-form" id="letterForm" action="https://formspree.io/f/xdkwyavz" method="POST">
+            <button type="button" class="close-button" id="closeFormButton">✕</button>
+            <h2 style="color: #c41e3a; text-align: center;">Твое письмо Деду Морозу</h2>
+            
+            <div class="form-group">
+                <label for="name">Твое имя:</label>
+                <input type="text" id="name" name="name" required placeholder="Как тебя зовут?">
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Твое письмо:</label>
+                <textarea id="message" name="message" required placeholder="Дорогой Дедушка Мороз!"></textarea>
+            </div>
+            
+            <button type="submit" class="submit-button">Отправить письмо ✉️</button>
+        </form>
+
+        <div class="success-message" id="successMessage">
+            Твое письмо отправлено Деду Морозу! 🎅✨
+        </div>
     </div>
 
     <script>
@@ -159,6 +265,36 @@
         
         setInterval(createSnowflake, 150);
         setInterval(createFirework, 700);
+
+        // Управление формой
+        document.getElementById('openFormButton').addEventListener('click', function() {
+            document.getElementById('letterForm').style.display = 'block';
+            document.getElementById('openFormButton').style.display = 'none';
+        });
+
+        document.getElementById('closeFormButton').addEventListener('click', function() {
+            document.getElementById('letterForm').style.display = 'none';
+            document.getElementById('openFormButton').style.display = 'inline-block';
+        });
+
+        // Обработка отправки формы
+        document.getElementById('letterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // В реальном приложении здесь будет отправка данных на сервер
+            // Для демонстрации просто показываем сообщение об успехе
+            document.getElementById('letterForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Через 5 секунд показываем кнопку снова
+            setTimeout(function() {
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('openFormButton').style.display = 'inline-block';
+            }, 5000);
+            
+            // В реальном приложении раскомментируйте следующую строку:
+            // this.submit();
+        });
     </script>
 </body>
 </html>
