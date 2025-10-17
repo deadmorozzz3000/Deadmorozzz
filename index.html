@@ -400,6 +400,7 @@
             <div class="hint-content">
                 <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
                     ✨ Тапни три раза на заголовок!<br>
+                    👆 Быстро нажми 3 раза по заголовку выше!
                 </div>
                 <button class="hint-close-button" id="hintCloseButton">Понятно!</button>
             </div>
@@ -589,7 +590,7 @@
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
-            mainTitle.innerHTML = '🎀 Письмо от самой милой 🦄';
+            mainTitle.innerHTML = '✨🦄🍬';
             
             // Меняем описание
             mainDescription.innerHTML = '✨ Что хочешь получить в подарок от дедушки?<br><br>Напиши все свои самые сокровенные желания!<br><br>Не стесняйся мечтать! 💖';
@@ -599,7 +600,57 @@
             backButton.style.display = 'inline-block';
             
             // Показываем сообщение
-            showMessage('🎀 Режим самой милой активирован! Все такое розовое и милое! 💖', '#ff69b4');
+            showMessage('🎀 Режим самой милой активирован! Все такое розовое! 💖', '#ff69b4');
             
             // Добавляем конфетти
-  
+            createPinkConfetti();
+        }
+
+        function activateSantaMode() {
+            isSnowgirlMode = false;
+            
+            // Выключаем розовую тему
+            document.body.classList.remove('snowgirl-mode');
+            
+            // Возвращаем заголовок
+            mainTitle.innerHTML = '✉️ Письмо для Дедушки Мороза';
+            
+            // Возвращаем описание
+            mainDescription.innerHTML = 'Дед уже старый, ленивый, за всеми детьми не уследишь<br><br>Поэтому нужно написать письмо дедушке<br><br>Можно со ссылками';
+            
+            // Показываем кнопку секрета, прячем кнопку возврата
+            secretButton.style.display = 'inline-block';
+            backButton.style.display = 'none';
+            
+            // Показываем сообщение
+            showMessage('🎅 Вернулись к Деду Морозу!', '#c41e3a');
+        }
+
+        function createPinkConfetti() {
+            const symbols = ['🎀', '✨', '🦄', '💖', '💝', '🌸', '🌺'];
+            const colors = ['#ff66b2', '#ff99cc', '#ff3385', '#ff69b4', '#ff1493'];
+            
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                confetti.classList.add('pink-confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        console.log('Сайт загружен! Переключай режимы по 3 тапа на заголовок');
+    </script>
+</body>
+</html>
