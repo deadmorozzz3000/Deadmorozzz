@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Письмо Дедушке Морозу</title>
     <style>
-        /* Все стили остаются точно такими же как были */
         body {
             background: linear-gradient(rgba(173, 216, 230, 0.8), rgba(240, 248, 255, 0.8)), 
                         url('https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
@@ -34,7 +33,12 @@
             font-size: 3em;
             margin-bottom: 30px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            transition: all 0.5s ease;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
         }
 
         .description {
@@ -63,53 +67,11 @@
             margin: 30px 0;
             transition: all 0.3s;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            text-decoration: none;
-            display: inline-block;
         }
 
         .mail-button:hover {
             background: linear-gradient(45deg, #c41e3a, #90c695);
             transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(144, 198, 149, 0.6);
-        }
-
-        .snowflake {
-            color: #a8d5e2;
-            font-size: 20px;
-            position: fixed;
-            top: -20px;
-            animation: fall linear infinite;
-            opacity: 0.7;
-        }
-
-        @keyframes fall {
-            to { 
-                transform: translateY(100vh) rotate(360deg); 
-            }
-        }
-
-        .firework {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: #c41e3a;
-            border-radius: 50%;
-            animation: explode 1.5s ease-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes explode {
-            0% {
-                transform: translateY(100vh) scale(1);
-                opacity: 1;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) scale(8);
-                opacity: 0;
-            }
         }
 
         /* Стили для формы */
@@ -123,75 +85,7 @@
             text-align: left;
             position: relative;
             border: 3px solid #c41e3a;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c5530;
-            font-size: 1.1em;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #90c695;
-            border-radius: 10px;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #c41e3a;
-            outline: none;
-            box-shadow: 0 0 5px rgba(196, 30, 58, 0.3);
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .submit-button {
-            background: linear-gradient(45deg, #90c695, #c41e3a);
-            color: white;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: block;
-            margin: 20px auto 0;
-            width: 100%;
-            max-width: 250px;
-        }
-
-        .submit-button:hover {
-            background: linear-gradient(45deg, #c41e3a, #90c695);
-            transform: scale(1.05);
-        }
-
-        .submit-button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
+            transition: all 0.5s ease;
         }
 
         .close-button {
@@ -204,6 +98,45 @@
             cursor: pointer;
             color: #c41e3a;
             font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c5530;
+            transition: all 0.5s ease;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #90c695;
+            border-radius: 10px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: all 0.5s ease;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .submit-button {
+            background: linear-gradient(45deg, #90c695, #c41e3a);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto 0;
+            display: block;
+            transition: all 0.5s ease;
         }
 
         .success-message {
@@ -216,80 +149,26 @@
             font-weight: bold;
             font-size: 1.2em;
             border: 2px solid #2c5530;
-            animation: fadeIn 0.5s ease;
+            transition: all 0.5s ease;
         }
 
-        .error-message {
-            display: none;
-            background: rgba(196, 30, 58, 0.1);
-            color: #c41e3a;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border: 1px solid #c41e3a;
-        }
-
-        .form-title {
-            color: #c41e3a;
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(196, 30, 58, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #c41e3a;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Стили для чистого состояния после отправки */
-        .clean-state .description,
-        .clean-state h1 {
-            display: none;
-        }
-
-        .clean-state .success-message {
-            display: block;
-            margin: 0 auto;
-            max-width: 500px;
-        }
-
-        /* Новые стили для кнопки подсказки Снегурочки */
+        /* Кнопка подсказки Снегурочки */
         .snowgirl-hint-button {
             background: linear-gradient(45deg, #ffb6c1, #ff69b4);
             color: white;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 20px;
-            font-size: 1em;
+            border-radius: 25px;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            margin: 15px 0;
+            margin: 20px 0;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
-            display: inline-block;
         }
 
         .snowgirl-hint-button:hover {
             background: linear-gradient(45deg, #ff69b4, #ffb6c1);
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
         }
 
         .snowgirl-hint {
@@ -299,39 +178,24 @@
             border-radius: 15px;
             margin-top: 20px;
             text-align: center;
-            position: relative;
             border: 3px solid #ff69b4;
-            animation: fadeIn 0.5s ease;
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .snowgirl-hint-content {
-            color: #b3005e;
-            font-size: 1.2em;
-            line-height: 1.5;
-            margin-bottom: 15px;
         }
 
         .snowgirl-close-button {
             background: #ff69b4;
             color: white;
             border: none;
-            padding: 8px 20px;
+            padding: 10px 25px;
             border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            margin-top: 15px;
         }
 
-        .snowgirl-close-button:hover {
-            background: #ff1493;
-            transform: scale(1.05);
-        }
-
-        /* Стили для розового режима Снегурочки */
+        /* РОЗОВЫЙ РЕЖИМ СНЕГУРОЧКИ */
         .snowgirl-mode {
             background: linear-gradient(135deg, #ffebf3, #ffe6f2, #ffd6e9) !important;
-            color: #b3005e !important;
         }
 
         .snowgirl-mode .content {
@@ -340,17 +204,20 @@
 
         .snowgirl-mode h1 {
             color: #ff1493 !important;
+            text-shadow: 1px 1px 3px rgba(255, 20, 147, 0.3);
         }
 
         .snowgirl-mode .description {
-            background: rgba(255, 105, 180, 0.1) !important;
+            background: rgba(255, 182, 193, 0.3) !important;
             border-left: 5px solid #ff69b4 !important;
             color: #b3005e !important;
+            backdrop-filter: blur(10px);
         }
 
         .snowgirl-mode .mail-button,
         .snowgirl-mode .submit-button {
             background: linear-gradient(45deg, #ff66b2, #ff99cc) !important;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
         }
 
         .snowgirl-mode .mail-button:hover,
@@ -359,18 +226,40 @@
         }
 
         .snowgirl-mode .letter-form {
+            background: rgba(255, 255, 255, 0.98) !important;
             border: 3px solid #ff69b4 !important;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+        }
+
+        .snowgirl-mode .close-button {
+            color: #ff69b4 !important;
+        }
+
+        .snowgirl-mode .form-group label {
+            color: #b3005e !important;
         }
 
         .snowgirl-mode .form-group input,
         .snowgirl-mode .form-group textarea {
             border: 2px solid #ff99cc !important;
+            background: rgba(255, 240, 245, 0.8);
         }
 
         .snowgirl-mode .form-group input:focus,
         .snowgirl-mode .form-group textarea:focus {
             border-color: #ff69b4 !important;
-            box-shadow: 0 0 5px rgba(255, 105, 180, 0.3) !important;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.3);
+            outline: none;
+        }
+
+        .snowgirl-mode .success-message {
+            background: rgba(255, 182, 193, 0.3) !important;
+            border: 2px solid #ff69b4 !important;
+            color: #b3005e !important;
+        }
+
+        .snowgirl-mode .snowgirl-hint-button {
+            background: linear-gradient(45deg, #ff69b4, #ff1493) !important;
         }
 
         .pink-confetti {
@@ -380,13 +269,20 @@
             z-index: 1000;
             pointer-events: none;
         }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="content" id="mainContent">
-        <h1>✉️ Письмо для Дедушки Мороза</h1>
+        <h1 id="mainTitle">✉️ Письмо для Дедушки Мороза</h1>
         
-        <div class="description">
+        <div class="description" id="mainDescription">
             Дед уже старый, ленивый, за всеми детьми не уследишь<br><br>
             Поэтому нужно написать письмо дедушке<br><br>
             Можно со ссылками
@@ -399,28 +295,19 @@
         <!-- Форма для письма -->
         <form class="letter-form" id="letterForm">
             <button type="button" class="close-button" id="closeFormButton">✕</button>
-            <div class="form-title">✉️ Твое письмо Деду Морозу</div>
+            <div style="color: #c41e3a; text-align: center; font-size: 1.8em; margin-bottom: 25px; transition: all 0.5s ease;" id="formTitle">✉️ Твое письмо</div>
             
             <div class="form-group">
-                <label for="name">🎅 Твое имя:</label>
+                <label for="name" id="nameLabel">🎅 Твое имя:</label>
                 <input type="text" id="name" name="name" required placeholder="Как тебя зовут?">
             </div>
             
             <div class="form-group">
-                <label for="message">📝 Твое письмо:</label>
-                <textarea id="message" name="message" required placeholder="Напиши здесь свое письмо, расскажи о своих желаниях и мечтах..."></textarea>
+                <label for="message" id="messageLabel">📝 Твое письмо:</label>
+                <textarea id="message" name="message" required placeholder="Напиши здесь свое письмо..." rows="5"></textarea>
             </div>
             
-            <div class="loading" id="loadingIndicator">
-                <div class="loading-spinner"></div>
-                <p>Отправляем письмо...</p>
-            </div>
-            
-            <div class="error-message" id="errorMessage">
-                Ой! Что-то пошло не так. Попробуй еще раз позже.
-            </div>
-            
-            <button type="submit" class="submit-button" id="submitButton">Отправить письмо ✉️</button>
+            <button type="submit" class="submit-button">Отправить письмо ✉️</button>
         </form>
 
         <div class="success-message" id="successMessage">
@@ -434,187 +321,136 @@
 
         <!-- Подсказка Снегурочки -->
         <div class="snowgirl-hint" id="snowgirlHint">
-            <div class="snowgirl-hint-content">
+            <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
                 ✨ Для активации режима Снегурочки:<br>
-                📱 Встряхни телефон 5 раз<br>
-                👆 Или быстро нажми 5 раз по заголовку
+                👆 Быстро нажми 3 раза по заголовку "Письмо для Дедушки Мороза"!
             </div>
             <button class="snowgirl-close-button" id="snowgirlCloseButton">Понятно!</button>
         </div>
     </div>
 
     <script>
-        // === ОСНОВНЫЕ ФУНКЦИИ САЙТА ===
-        
-        // Снежинки
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.innerHTML = '❄';
-            snowflake.classList.add('snowflake');
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-            snowflake.style.opacity = Math.random() * 0.5 + 0.3;
-            snowflake.style.fontSize = (Math.random() * 10 + 15) + 'px';
-            document.body.appendChild(snowflake);
+        // Функция для показа сообщения
+        function showMessage(text, color = '#ff69b4') {
+            const message = document.createElement('div');
+            message.textContent = text;
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${color};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                font-weight: bold;
+                z-index: 1000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            document.body.appendChild(message);
             
             setTimeout(() => {
-                snowflake.remove();
-            }, 5000);
+                message.remove();
+            }, 3000);
         }
 
-        // Салюты
-        function createFirework() {
-            const firework = document.createElement('div');
-            firework.classList.add('firework');
-            firework.style.left = Math.random() * 100 + 'vw';
-            firework.style.animationDelay = Math.random() * 2 + 's';
-            firework.style.background = getRandomColor();
-            document.body.appendChild(firework);
-            
-            setTimeout(() => {
-                firework.remove();
-            }, 2000);
-        }
-
-        function getRandomColor() {
-            const colors = ['#c41e3a', '#90c695', '#a8d5e2', '#2c5530'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-        
-        // Запускаем анимации
-        setInterval(createSnowflake, 150);
-        setInterval(createFirework, 700);
-
-        // === УПРАВЛЕНИЕ ФОРМОЙ ПИСЬМА ===
+        // === ОСНОВНЫЕ ФУНКЦИИ ФОРМЫ ===
         const openFormButton = document.getElementById('openFormButton');
         const closeFormButton = document.getElementById('closeFormButton');
         const letterForm = document.getElementById('letterForm');
         const successMessage = document.getElementById('successMessage');
-        const errorMessage = document.getElementById('errorMessage');
-        const loadingIndicator = document.getElementById('loadingIndicator');
-        const submitButton = document.getElementById('submitButton');
-        const mainContent = document.getElementById('mainContent');
 
-        // Открытие формы
-        if (openFormButton) {
-            openFormButton.addEventListener('click', function() {
-                letterForm.style.display = 'block';
-                openFormButton.style.display = 'none';
+        openFormButton.addEventListener('click', function() {
+            letterForm.style.display = 'block';
+            openFormButton.style.display = 'none';
+        });
+
+        closeFormButton.addEventListener('click', function() {
+            letterForm.style.display = 'none';
+            openFormButton.style.display = 'block';
+            letterForm.reset();
+        });
+
+        letterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            successMessage.style.display = 'block';
+            letterForm.style.display = 'none';
+            
+            setTimeout(function() {
                 successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
-            });
-        }
+                openFormButton.style.display = 'block';
+            }, 3000);
+        });
 
-        // Закрытие формы
-        if (closeFormButton) {
-            closeFormButton.addEventListener('click', function() {
-                letterForm.style.display = 'none';
-                openFormButton.style.display = 'inline-block';
-                successMessage.style.display = 'none';
-                errorMessage.style.display = 'none';
-                letterForm.reset();
-            });
-        }
+        // === ПОДСКАЗКА СНЕГУРОЧКИ ===
+        const snowgirlHintButton = document.getElementById('snowgirlHintButton');
+        const snowgirlHint = document.getElementById('snowgirlHint');
+        const snowgirlCloseButton = document.getElementById('snowgirlCloseButton');
 
-        // Отправка формы
-        if (letterForm) {
-            letterForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Получаем данные формы
-                const formData = new FormData(letterForm);
-                const data = {
-                    name: formData.get('name'),
-                    message: formData.get('message')
-                };
-                
-                // Показываем индикатор загрузки
-                loadingIndicator.style.display = 'block';
-                errorMessage.style.display = 'none';
-                submitButton.disabled = true;
-                
-                // Создаем промис для имитации отправки
-                const sendPromise = fetch('https://formspree.io/f/xdkwyavz', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                // Создаем промис для минимального времени отображения загрузки (2 секунды)
-                const minDisplayTime = new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Ждем завершения обоих промисов
-                Promise.all([sendPromise, minDisplayTime])
-                .then(([response]) => {
-                    if (response.ok) {
-                        // Успешная отправка - переходим в чистое состояние
-                        mainContent.classList.add('clean-state');
-                        successMessage.style.display = 'block';
-                        letterForm.reset();
-                        letterForm.style.display = 'none';
-                        
-                        // Через 3 секунды возвращаем в исходное состояние
-                        setTimeout(function() {
-                            mainContent.classList.remove('clean-state');
-                            successMessage.style.display = 'none';
-                            openFormButton.style.display = 'inline-block';
-                        }, 3000);
-                    } else {
-                        throw new Error('Ошибка отправки');
-                    }
-                })
-                .catch(error => {
-                    // Ошибка отправки
-                    errorMessage.style.display = 'block';
-                    console.error('Ошибка:', error);
-                })
-                .finally(() => {
-                    // Скрываем индикатор загрузки
-                    loadingIndicator.style.display = 'none';
-                    submitButton.disabled = false;
-                });
-            });
-        }
+        snowgirlHintButton.addEventListener('click', function() {
+            snowgirlHint.style.display = 'block';
+            snowgirlHintButton.style.display = 'none';
+        });
+
+        snowgirlCloseButton.addEventListener('click', function() {
+            snowgirlHint.style.display = 'none';
+            snowgirlHintButton.style.display = 'block';
+        });
 
         // === РЕЖИМ СНЕГУРОЧКИ ===
-        
-        // Секретный режим Снегурочки
-        function activateSnowGirlMode() {
-            console.log('Активируем режим Снегурочки!');
+        let tapCount = 0;
+        let lastTap = 0;
+        const mainTitle = document.getElementById('mainTitle');
+        const mainDescription = document.getElementById('mainDescription');
+
+        mainTitle.addEventListener('click', function() {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
             
-            // Активируем розовую тему
+            if (tapLength < 500 && tapLength > 0) {
+                tapCount++;
+                showMessage(`✨ ${tapCount}/3 для Снегурочки!`, '#ff69b4');
+                
+                if (tapCount === 3) {
+                    activateSnowGirlMode();
+                    tapCount = 0;
+                }
+            } else {
+                tapCount = 1;
+            }
+            lastTap = currentTime;
+        });
+
+        function activateSnowGirlMode() {
+            // Включаем розовую тему
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
-            const header = document.querySelector('h1');
-            if (header) {
-                header.innerHTML = '🦄 СЕКРЕТНЫЙ РЕЖИМ СНЕГУРОЧКИ ✨';
-            }
+            mainTitle.innerHTML = '🎀 Письмо для Снегурочки 🦄';
+            
+            // Меняем описание
+            mainDescription.innerHTML = '✨ Что хочешь получить в подарок от дедушки?<br><br>Напиши все свои самые сокровенные желания!<br><br>Не стесняйся мечтать! 💖';
             
             // Показываем сообщение
-            const message = document.createElement('div');
-            message.innerHTML = '🎀 Режим Снегурочки активирован! Все такое розовое и милое!';
-            message.style.cssText = 'text-align: center; padding: 15px; background: #ff99cc; color: white; border-radius: 10px; margin: 20px 0; font-weight: bold;';
-            document.querySelector('.content').insertBefore(message, document.querySelector('.description'));
+            showMessage('🎀 Режим Снегурочки активирован! Все такое розовое и милое! 💖', '#ff69b4');
             
-            // Добавляем розовое конфетти
-            setTimeout(createPinkConfetti, 500);
+            // Добавляем конфетти
+            createPinkConfetti();
         }
 
-        // Функция для розового конфетти
         function createPinkConfetti() {
-            const colors = ['#ff66b2', '#ff99cc', '#ff3385', '#ffebf3', '#ffd6e9'];
+            const symbols = ['🎀', '✨', '🦄', '💖', '💝', '🌸', '🌺'];
+            const colors = ['#ff66b2', '#ff99cc', '#ff3385', '#ff69b4', '#ff1493'];
             
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 25; i++) {
                 const confetti = document.createElement('div');
-                confetti.innerHTML = '🎀✨';
+                confetti.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
                 confetti.classList.add('pink-confetti');
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
                 confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
                 
                 document.body.appendChild(confetti);
                 
@@ -626,76 +462,7 @@
             }
         }
 
-        // Активация по тап-коду (5 быстрых тапов по заголовку)
-        let tapCount = 0;
-        let lastTap = 0;
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const title = document.querySelector('h1');
-            if (title) {
-                title.style.cursor = 'pointer';
-                title.title = 'Быстро нажми 5 раз для секрета!';
-                title.addEventListener('click', function() {
-                    const currentTime = new Date().getTime();
-                    const tapLength = currentTime - lastTap;
-                    
-                    if (tapLength < 500 && tapLength > 0) {
-                        tapCount++;
-                        console.log(`Тап ${tapCount}`);
-                        if (tapCount === 5) {
-                            activateSnowGirlMode();
-                            tapCount = 0;
-                        }
-                    } else {
-                        tapCount = 1;
-                    }
-                    lastTap = currentTime;
-                });
-            }
-        });
-
-        // Активация по встряхиванию телефона
-        let shakeCount = 0;
-        let lastShake = 0;
-
-        if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', function(e) {
-                const acceleration = e.accelerationIncludingGravity;
-                if (!acceleration) return;
-                
-                const shake = Math.abs(acceleration.x) + Math.abs(acceleration.y) + Math.abs(acceleration.z);
-                
-                if (shake > 15 && Date.now() - lastShake > 1000) {
-                    shakeCount++;
-                    lastShake = Date.now();
-                    console.log(`Встряхивание ${shakeCount}`);
-                    
-                    if (shakeCount >= 3) {
-                        activateSnowGirlMode();
-                        shakeCount = 0;
-                    }
-                }
-            });
-        }
-
-        // === УПРАВЛЕНИЕ ПОДСКАЗКОЙ СНЕГУРОЧКИ ===
-        const snowgirlHintButton = document.getElementById('snowgirlHintButton');
-        const snowgirlHint = document.getElementById('snowgirlHint');
-        const snowgirlCloseButton = document.getElementById('snowgirlCloseButton');
-
-        if (snowgirlHintButton && snowgirlHint && snowgirlCloseButton) {
-            snowgirlHintButton.addEventListener('click', function() {
-                snowgirlHint.style.display = 'block';
-                snowgirlHintButton.style.display = 'none';
-            });
-
-            snowgirlCloseButton.addEventListener('click', function() {
-                snowgirlHint.style.display = 'none';
-                snowgirlHintButton.style.display = 'inline-block';
-            });
-        }
-
-        console.log('Скрипт загружен! Все кнопки должны работать.');
+        console.log('Сайт загружен! Кликай 3 раза по "Письмо для Дедушки Мороза"');
     </script>
 </body>
 </html>
