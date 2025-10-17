@@ -338,6 +338,20 @@
                 opacity: 0;
             }
         }
+
+        /* Стили для чистого состояния после отправки */
+        .clean-state .description,
+        .clean-state h1,
+        .clean-state .secret-button,
+        .clean-state .back-button {
+            display: none;
+        }
+
+        .clean-state .success-message {
+            display: block;
+            margin: 0 auto;
+            max-width: 500px;
+        }
     </style>
 </head>
 <body>
@@ -382,7 +396,8 @@
         </form>
 
         <div class="success-message" id="successMessage">
-            ✅ Письмо отправлено! 🎅✨
+            ✅ Письмо отправлено! 🎅✨<br>
+            Дед Мороз уже бежит его читать!
         </div>
 
         <!-- Кнопка секрета -->
@@ -400,7 +415,6 @@
             <div class="hint-content">
                 <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
                     ✨ Тапни три раза на заголовок!<br>
-                    👆 Быстро нажми 3 раза по заголовку выше!
                 </div>
                 <button class="hint-close-button" id="hintCloseButton">Понятно!</button>
             </div>
@@ -440,6 +454,9 @@
         const submitButton = document.getElementById('submitButton');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const errorMessage = document.getElementById('errorMessage');
+        const mainContent = document.getElementById('mainContent');
+        const secretButton = document.getElementById('secretButton');
+        const backButton = document.getElementById('backButton');
 
         openFormButton.addEventListener('click', function() {
             letterForm.style.display = 'block';
@@ -489,15 +506,23 @@
             Promise.all([sendPromise, minDisplayTime])
             .then(([response]) => {
                 if (response.ok) {
-                    // Успешная отправка
+                    // Успешная отправка - переходим в чистое состояние
+                    mainContent.classList.add('clean-state');
                     successMessage.style.display = 'block';
                     letterForm.reset();
                     letterForm.style.display = 'none';
                     
-                    // Через 3 секунды возвращаем в исходное состояние
+                    // Через 4 секунды возвращаем в исходное состояние
                     setTimeout(function() {
+                        mainContent.classList.remove('clean-state');
                         successMessage.style.display = 'none';
                         openFormButton.style.display = 'inline-block';
+                        // Возвращаем кнопки в зависимости от режима
+                        if (isSnowgirlMode) {
+                            backButton.style.display = 'inline-block';
+                        } else {
+                            secretButton.style.display = 'inline-block';
+                        }
                     }, 3000);
                 } else {
                     throw new Error('Ошибка отправки');
@@ -516,8 +541,6 @@
         });
 
         // === ПОДСКАЗКА ===
-        const secretButton = document.getElementById('secretButton');
-        const backButton = document.getElementById('backButton');
         const hintOverlay = document.getElementById('hintOverlay');
         const hintCloseButton = document.getElementById('hintCloseButton');
 
@@ -590,7 +613,7 @@
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
-            mainTitle.innerHTML = '✨🦄🍬';
+            mainTitle.innerHTML = '🎀 Письмо от самой милой 🦄';
             
             // Меняем описание
             mainDescription.innerHTML = '✨ Что хочешь получить в подарок от дедушки?<br><br>Напиши все свои самые сокровенные желания!<br><br>Не стесняйся мечтать! 💖';
