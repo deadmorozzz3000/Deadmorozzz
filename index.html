@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Письмо Дедушке Морозу</title>
     <style>
+        /* Все стили остаются точно такими же как были */
         body {
             background: linear-gradient(rgba(173, 216, 230, 0.8), rgba(240, 248, 255, 0.8)), 
                         url('https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
@@ -268,6 +269,117 @@
             margin: 0 auto;
             max-width: 500px;
         }
+
+        /* Новые стили для кнопки подсказки Снегурочки */
+        .snowgirl-hint-button {
+            background: linear-gradient(45deg, #ffb6c1, #ff69b4);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            display: inline-block;
+        }
+
+        .snowgirl-hint-button:hover {
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
+        }
+
+        .snowgirl-hint {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            border: 3px solid #ff69b4;
+            animation: fadeIn 0.5s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .snowgirl-hint-content {
+            color: #b3005e;
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .snowgirl-close-button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .snowgirl-close-button:hover {
+            background: #ff1493;
+            transform: scale(1.05);
+        }
+
+        /* Стили для розового режима Снегурочки */
+        .snowgirl-mode {
+            background: linear-gradient(135deg, #ffebf3, #ffe6f2, #ffd6e9) !important;
+            color: #b3005e !important;
+        }
+
+        .snowgirl-mode .content {
+            color: #b3005e;
+        }
+
+        .snowgirl-mode h1 {
+            color: #ff1493 !important;
+        }
+
+        .snowgirl-mode .description {
+            background: rgba(255, 105, 180, 0.1) !important;
+            border-left: 5px solid #ff69b4 !important;
+            color: #b3005e !important;
+        }
+
+        .snowgirl-mode .mail-button,
+        .snowgirl-mode .submit-button {
+            background: linear-gradient(45deg, #ff66b2, #ff99cc) !important;
+        }
+
+        .snowgirl-mode .mail-button:hover,
+        .snowgirl-mode .submit-button:hover {
+            background: linear-gradient(45deg, #ff99cc, #ff66b2) !important;
+        }
+
+        .snowgirl-mode .letter-form {
+            border: 3px solid #ff69b4 !important;
+        }
+
+        .snowgirl-mode .form-group input,
+        .snowgirl-mode .form-group textarea {
+            border: 2px solid #ff99cc !important;
+        }
+
+        .snowgirl-mode .form-group input:focus,
+        .snowgirl-mode .form-group textarea:focus {
+            border-color: #ff69b4 !important;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.3) !important;
+        }
+
+        .pink-confetti {
+            position: fixed;
+            font-size: 20px;
+            animation: fall 3s linear forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -314,9 +426,26 @@
         <div class="success-message" id="successMessage">
             ✅ Письмо отправлено! 🎅✨
         </div>
+
+        <!-- Кнопка подсказки Снегурочки -->
+        <button class="snowgirl-hint-button" id="snowgirlHintButton">
+            🎀 Секрет Снегурочки
+        </button>
+
+        <!-- Подсказка Снегурочки -->
+        <div class="snowgirl-hint" id="snowgirlHint">
+            <div class="snowgirl-hint-content">
+                ✨ Для активации режима Снегурочки:<br>
+                📱 Встряхни телефон 5 раз<br>
+                👆 Или быстро нажми 5 раз по заголовку
+            </div>
+            <button class="snowgirl-close-button" id="snowgirlCloseButton">Понятно!</button>
+        </div>
     </div>
 
     <script>
+        // === ОСНОВНЫЕ ФУНКЦИИ САЙТА ===
+        
         // Снежинки
         function createSnowflake() {
             const snowflake = document.createElement('div');
@@ -352,10 +481,11 @@
             return colors[Math.floor(Math.random() * colors.length)];
         }
         
+        // Запускаем анимации
         setInterval(createSnowflake, 150);
         setInterval(createFirework, 700);
 
-        // Управление формой
+        // === УПРАВЛЕНИЕ ФОРМОЙ ПИСЬМА ===
         const openFormButton = document.getElementById('openFormButton');
         const closeFormButton = document.getElementById('closeFormButton');
         const letterForm = document.getElementById('letterForm');
@@ -365,80 +495,207 @@
         const submitButton = document.getElementById('submitButton');
         const mainContent = document.getElementById('mainContent');
 
-        openFormButton.addEventListener('click', function() {
-            letterForm.style.display = 'block';
-            openFormButton.style.display = 'none';
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-        });
-
-        closeFormButton.addEventListener('click', function() {
-            letterForm.style.display = 'none';
-            openFormButton.style.display = 'inline-block';
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-            letterForm.reset();
-        });
-
-        // Обработка отправки формы через AJAX
-        letterForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Получаем данные формы
-            const formData = new FormData(letterForm);
-            const data = {
-                name: formData.get('name'),
-                message: formData.get('message')
-            };
-            
-            // Показываем индикатор загрузки
-            loadingIndicator.style.display = 'block';
-            errorMessage.style.display = 'none';
-            submitButton.disabled = true;
-            
-            // Создаем промис для имитации отправки
-            const sendPromise = fetch('https://formspree.io/f/xdkwyavz', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
+        // Открытие формы
+        if (openFormButton) {
+            openFormButton.addEventListener('click', function() {
+                letterForm.style.display = 'block';
+                openFormButton.style.display = 'none';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
             });
+        }
+
+        // Закрытие формы
+        if (closeFormButton) {
+            closeFormButton.addEventListener('click', function() {
+                letterForm.style.display = 'none';
+                openFormButton.style.display = 'inline-block';
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+                letterForm.reset();
+            });
+        }
+
+        // Отправка формы
+        if (letterForm) {
+            letterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Получаем данные формы
+                const formData = new FormData(letterForm);
+                const data = {
+                    name: formData.get('name'),
+                    message: formData.get('message')
+                };
+                
+                // Показываем индикатор загрузки
+                loadingIndicator.style.display = 'block';
+                errorMessage.style.display = 'none';
+                submitButton.disabled = true;
+                
+                // Создаем промис для имитации отправки
+                const sendPromise = fetch('https://formspree.io/f/xdkwyavz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Создаем промис для минимального времени отображения загрузки (2 секунды)
+                const minDisplayTime = new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Ждем завершения обоих промисов
+                Promise.all([sendPromise, minDisplayTime])
+                .then(([response]) => {
+                    if (response.ok) {
+                        // Успешная отправка - переходим в чистое состояние
+                        mainContent.classList.add('clean-state');
+                        successMessage.style.display = 'block';
+                        letterForm.reset();
+                        letterForm.style.display = 'none';
+                        
+                        // Через 3 секунды возвращаем в исходное состояние
+                        setTimeout(function() {
+                            mainContent.classList.remove('clean-state');
+                            successMessage.style.display = 'none';
+                            openFormButton.style.display = 'inline-block';
+                        }, 3000);
+                    } else {
+                        throw new Error('Ошибка отправки');
+                    }
+                })
+                .catch(error => {
+                    // Ошибка отправки
+                    errorMessage.style.display = 'block';
+                    console.error('Ошибка:', error);
+                })
+                .finally(() => {
+                    // Скрываем индикатор загрузки
+                    loadingIndicator.style.display = 'none';
+                    submitButton.disabled = false;
+                });
+            });
+        }
+
+        // === РЕЖИМ СНЕГУРОЧКИ ===
+        
+        // Секретный режим Снегурочки
+        function activateSnowGirlMode() {
+            console.log('Активируем режим Снегурочки!');
             
-            // Создаем промис для минимального времени отображения загрузки (2 секунды)
-            const minDisplayTime = new Promise(resolve => setTimeout(resolve, 2000));
+            // Активируем розовую тему
+            document.body.classList.add('snowgirl-mode');
             
-            // Ждем завершения обоих промисов
-            Promise.all([sendPromise, minDisplayTime])
-            .then(([response]) => {
-                if (response.ok) {
-                    // Успешная отправка - переходим в чистое состояние
-                    mainContent.classList.add('clean-state');
-                    successMessage.style.display = 'block';
-                    letterForm.reset();
-                    letterForm.style.display = 'none';
+            // Меняем заголовок
+            const header = document.querySelector('h1');
+            if (header) {
+                header.innerHTML = '🦄 СЕКРЕТНЫЙ РЕЖИМ СНЕГУРОЧКИ ✨';
+            }
+            
+            // Показываем сообщение
+            const message = document.createElement('div');
+            message.innerHTML = '🎀 Режим Снегурочки активирован! Все такое розовое и милое!';
+            message.style.cssText = 'text-align: center; padding: 15px; background: #ff99cc; color: white; border-radius: 10px; margin: 20px 0; font-weight: bold;';
+            document.querySelector('.content').insertBefore(message, document.querySelector('.description'));
+            
+            // Добавляем розовое конфетти
+            setTimeout(createPinkConfetti, 500);
+        }
+
+        // Функция для розового конфетти
+        function createPinkConfetti() {
+            const colors = ['#ff66b2', '#ff99cc', '#ff3385', '#ffebf3', '#ffd6e9'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = '🎀✨';
+                confetti.classList.add('pink-confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        // Активация по тап-коду (5 быстрых тапов по заголовку)
+        let tapCount = 0;
+        let lastTap = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.querySelector('h1');
+            if (title) {
+                title.style.cursor = 'pointer';
+                title.title = 'Быстро нажми 5 раз для секрета!';
+                title.addEventListener('click', function() {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
                     
-                    // Через 3 секунды возвращаем в исходное состояние
-                    setTimeout(function() {
-                        mainContent.classList.remove('clean-state');
-                        successMessage.style.display = 'none';
-                        openFormButton.style.display = 'inline-block';
-                    }, 3000);
-                } else {
-                    throw new Error('Ошибка отправки');
-                }
-            })
-            .catch(error => {
-                // Ошибка отправки
-                errorMessage.style.display = 'block';
-                console.error('Ошибка:', error);
-            })
-            .finally(() => {
-                // Скрываем индикатор загрузки
-                loadingIndicator.style.display = 'none';
-                submitButton.disabled = false;
-            });
+                    if (tapLength < 500 && tapLength > 0) {
+                        tapCount++;
+                        console.log(`Тап ${tapCount}`);
+                        if (tapCount === 5) {
+                            activateSnowGirlMode();
+                            tapCount = 0;
+                        }
+                    } else {
+                        tapCount = 1;
+                    }
+                    lastTap = currentTime;
+                });
+            }
         });
+
+        // Активация по встряхиванию телефона
+        let shakeCount = 0;
+        let lastShake = 0;
+
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', function(e) {
+                const acceleration = e.accelerationIncludingGravity;
+                if (!acceleration) return;
+                
+                const shake = Math.abs(acceleration.x) + Math.abs(acceleration.y) + Math.abs(acceleration.z);
+                
+                if (shake > 15 && Date.now() - lastShake > 1000) {
+                    shakeCount++;
+                    lastShake = Date.now();
+                    console.log(`Встряхивание ${shakeCount}`);
+                    
+                    if (shakeCount >= 3) {
+                        activateSnowGirlMode();
+                        shakeCount = 0;
+                    }
+                }
+            });
+        }
+
+        // === УПРАВЛЕНИЕ ПОДСКАЗКОЙ СНЕГУРОЧКИ ===
+        const snowgirlHintButton = document.getElementById('snowgirlHintButton');
+        const snowgirlHint = document.getElementById('snowgirlHint');
+        const snowgirlCloseButton = document.getElementById('snowgirlCloseButton');
+
+        if (snowgirlHintButton && snowgirlHint && snowgirlCloseButton) {
+            snowgirlHintButton.addEventListener('click', function() {
+                snowgirlHint.style.display = 'block';
+                snowgirlHintButton.style.display = 'none';
+            });
+
+            snowgirlCloseButton.addEventListener('click', function() {
+                snowgirlHint.style.display = 'none';
+                snowgirlHintButton.style.display = 'inline-block';
+            });
+        }
+
+        console.log('Скрипт загружен! Все кнопки должны работать.');
     </script>
 </body>
 </html>
