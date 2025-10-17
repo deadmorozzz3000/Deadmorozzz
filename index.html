@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Письмо Дедушке Морозу</title>
     <style>
         body {
@@ -175,6 +177,12 @@
             transform: scale(1.05);
         }
 
+        .submit-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .close-button {
             position: absolute;
             top: 10px;
@@ -199,12 +207,43 @@
             border: 2px solid #2c5530;
         }
 
+        .error-message {
+            display: none;
+            background: rgba(196, 30, 58, 0.1);
+            color: #c41e3a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #c41e3a;
+        }
+
         .form-title {
             color: #c41e3a;
             text-align: center;
             margin-bottom: 25px;
             font-size: 1.8em;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(196, 30, 58, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #c41e3a;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -223,7 +262,7 @@
         </button>
 
         <!-- Форма для письма -->
-        <form class="letter-form" id="letterForm" action="https://formspree.io/f/xdkwyavz" method="POST">
+        <form class="letter-form" id="letterForm">
             <button type="button" class="close-button" id="closeFormButton">✕</button>
             <div class="form-title">✉️ Твое письмо Деду Морозу</div>
             
@@ -241,10 +280,16 @@
 С любовью,"></textarea>
             </div>
             
-            <input type="hidden" name="_subject" value="Новое письмо Деду Морозу!">
-            <input type="hidden" name="_language" value="ru">
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Отправляем письмо...</p>
+            </div>
             
-            <button type="submit" class="submit-button">Отправить письмо ✉️</button>
+            <div class="error-message" id="errorMessage">
+                Ой! Что-то пошло не так. Попробуй еще раз позже.
+            </div>
+            
+            <button type="submit" class="submit-button" id="submitButton">Отправить письмо ✉️</button>
         </form>
 
         <div class="success-message" id="successMessage">
@@ -293,32 +338,79 @@
         setInterval(createFirework, 700);
 
         // Управление формой
-        document.getElementById('openFormButton').addEventListener('click', function() {
-            document.getElementById('letterForm').style.display = 'block';
-            document.getElementById('openFormButton').style.display = 'none';
+        const openFormButton = document.getElementById('openFormButton');
+        const closeFormButton = document.getElementById('closeFormButton');
+        const letterForm = document.getElementById('letterForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const submitButton = document.getElementById('submitButton');
+
+        openFormButton.addEventListener('click', function() {
+            letterForm.style.display = 'block';
+            openFormButton.style.display = 'none';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
         });
 
-        document.getElementById('closeFormButton').addEventListener('click', function() {
-            document.getElementById('letterForm').style.display = 'none';
-            document.getElementById('openFormButton').style.display = 'inline-block';
-            document.getElementById('successMessage').style.display = 'none';
+        closeFormButton.addEventListener('click', function() {
+            letterForm.style.display = 'none';
+            openFormButton.style.display = 'inline-block';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            letterForm.reset();
         });
 
-        // Обработка отправки формы
-        document.getElementById('letterForm').addEventListener('submit', function(e) {
-            // Не предотвращаем стандартное поведение - форма отправится на Formspree
-            // Показываем сообщение об успехе
-            setTimeout(function() {
-                document.getElementById('letterForm').style.display = 'none';
-                document.getElementById('successMessage').style.display = 'block';
-                
-                // Через 5 секунд показываем кнопку снова
-                setTimeout(function() {
-                    document.getElementById('successMessage').style.display = 'none';
-                    document.getElementById('openFormButton').style.display = 'inline-block';
-                    document.getElementById('letterForm').reset();
-                }, 5000);
-            }, 100);
+        // Обработка отправки формы через AJAX
+        letterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные формы
+            const formData = new FormData(letterForm);
+            const data = {
+                name: formData.get('name'),
+                message: formData.get('message')
+            };
+            
+            // Показываем индикатор загрузки
+            loadingIndicator.style.display = 'block';
+            errorMessage.style.display = 'none';
+            submitButton.disabled = true;
+            
+            // Отправляем данные на Formspree
+            fetch('https://formspree.io/f/xdkwyavz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Успешная отправка
+                    letterForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    letterForm.reset();
+                    
+                    // Через 5 секунд показываем кнопку снова
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                        openFormButton.style.display = 'inline-block';
+                    }, 5000);
+                } else {
+                    throw new Error('Ошибка отправки');
+                }
+            })
+            .catch(error => {
+                // Ошибка отправки
+                errorMessage.style.display = 'block';
+                console.error('Ошибка:', error);
+            })
+            .finally(() => {
+                // Скрываем индикатор загрузки
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+            });
         });
     </script>
 </body>
