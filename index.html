@@ -67,6 +67,8 @@
             margin: 30px 0;
             transition: all 0.3s;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            display: inline-block;
+            width: auto;
         }
 
         .mail-button:hover {
@@ -137,6 +139,7 @@
             margin: 20px auto 0;
             display: block;
             transition: all 0.5s ease;
+            width: auto;
         }
 
         .success-message {
@@ -152,6 +155,37 @@
             transition: all 0.5s ease;
         }
 
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(196, 30, 58, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #c41e3a;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            display: none;
+            background: rgba(196, 30, 58, 0.1);
+            color: #c41e3a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #c41e3a;
+        }
+
         /* Кнопка подсказки Снегурочки */
         .snowgirl-hint-button {
             background: linear-gradient(45deg, #ffb6c1, #ff69b4);
@@ -164,6 +198,8 @@
             cursor: pointer;
             margin: 20px 0;
             transition: all 0.3s;
+            display: inline-block;
+            width: auto;
         }
 
         .snowgirl-hint-button:hover {
@@ -191,6 +227,7 @@
             cursor: pointer;
             font-weight: bold;
             margin-top: 15px;
+            display: inline-block;
         }
 
         /* РОЗОВЫЙ РЕЖИМ СНЕГУРОЧКИ */
@@ -307,7 +344,16 @@
                 <textarea id="message" name="message" required placeholder="Напиши здесь свое письмо..." rows="5"></textarea>
             </div>
             
-            <button type="submit" class="submit-button">Отправить письмо ✉️</button>
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Отправляем письмо...</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                Ой! Что-то пошло не так. Попробуй еще раз позже.
+            </div>
+            
+            <button type="submit" class="submit-button" id="submitButton">Отправить письмо ✉️</button>
         </form>
 
         <div class="success-message" id="successMessage">
@@ -359,27 +405,81 @@
         const closeFormButton = document.getElementById('closeFormButton');
         const letterForm = document.getElementById('letterForm');
         const successMessage = document.getElementById('successMessage');
+        const submitButton = document.getElementById('submitButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
 
         openFormButton.addEventListener('click', function() {
             letterForm.style.display = 'block';
             openFormButton.style.display = 'none';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
         });
 
         closeFormButton.addEventListener('click', function() {
             letterForm.style.display = 'none';
-            openFormButton.style.display = 'block';
+            openFormButton.style.display = 'inline-block';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
             letterForm.reset();
         });
 
+        // Обработка отправки формы через Formspree
         letterForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            successMessage.style.display = 'block';
-            letterForm.style.display = 'none';
             
-            setTimeout(function() {
-                successMessage.style.display = 'none';
-                openFormButton.style.display = 'block';
-            }, 3000);
+            // Получаем данные формы
+            const formData = new FormData(letterForm);
+            const data = {
+                name: formData.get('name'),
+                message: formData.get('message')
+            };
+            
+            // Показываем индикатор загрузки
+            loadingIndicator.style.display = 'block';
+            errorMessage.style.display = 'none';
+            submitButton.disabled = true;
+            
+            // Отправляем на Formspree
+            const sendPromise = fetch('https://formspree.io/f/xdkwyavz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            // Минимальное время отображения загрузки (2 секунды)
+            const minDisplayTime = new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Ждем завершения обоих промисов
+            Promise.all([sendPromise, minDisplayTime])
+            .then(([response]) => {
+                if (response.ok) {
+                    // Успешная отправка
+                    successMessage.style.display = 'block';
+                    letterForm.reset();
+                    letterForm.style.display = 'none';
+                    
+                    // Через 3 секунды возвращаем в исходное состояние
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                        openFormButton.style.display = 'inline-block';
+                    }, 3000);
+                } else {
+                    throw new Error('Ошибка отправки');
+                }
+            })
+            .catch(error => {
+                // Ошибка отправки
+                errorMessage.style.display = 'block';
+                console.error('Ошибка:', error);
+            })
+            .finally(() => {
+                // Скрываем индикатор загрузки
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+            });
         });
 
         // === ПОДСКАЗКА СНЕГУРОЧКИ ===
@@ -394,7 +494,7 @@
 
         snowgirlCloseButton.addEventListener('click', function() {
             snowgirlHint.style.display = 'none';
-            snowgirlHintButton.style.display = 'block';
+            snowgirlHintButton.style.display = 'inline-block';
         });
 
         // === РЕЖИМ СНЕГУРОЧКИ ===
@@ -426,7 +526,7 @@
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
-            mainTitle.innerHTML = '🎀 Письмо для Снегурочки 🦄';
+            mainTitle.innerHTML = '🎀 Письмо для самой милой 🦄';
             
             // Меняем описание
             mainDescription.innerHTML = '✨ Что хочешь получить в подарок от дедушки?<br><br>Напиши все свои самые сокровенные желания!<br><br>Не стесняйся мечтать! 💖';
@@ -462,7 +562,7 @@
             }
         }
 
-        console.log('Сайт загружен! Кликай 3 раза по "Письмо для Дедушки Мороза"');
+        console.log('Сайт загружен! Письма отправляются на Formspree');
     </script>
 </body>
 </html>
