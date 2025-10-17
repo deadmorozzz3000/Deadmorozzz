@@ -341,9 +341,7 @@
 
         /* Стили для чистого состояния после отправки */
         .clean-state .description,
-        .clean-state h1,
-        .clean-state .secret-button,
-        .clean-state .back-button {
+        .clean-state h1 {
             display: none;
         }
 
@@ -415,6 +413,7 @@
             <div class="hint-content">
                 <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
                     ✨ Тапни три раза на заголовок!<br>
+                    👆 Быстро нажми 3 раза по заголовку выше!
                 </div>
                 <button class="hint-close-button" id="hintCloseButton">Понятно!</button>
             </div>
@@ -512,11 +511,16 @@
                     letterForm.reset();
                     letterForm.style.display = 'none';
                     
-                    // Через 4 секунды возвращаем в исходное состояние
+                    // ЯВНО скрываем кнопки
+                    secretButton.style.display = 'none';
+                    backButton.style.display = 'none';
+                    
+                    // Через 3 секунды возвращаем в исходное состояние
                     setTimeout(function() {
                         mainContent.classList.remove('clean-state');
                         successMessage.style.display = 'none';
                         openFormButton.style.display = 'inline-block';
+                        
                         // Возвращаем кнопки в зависимости от режима
                         if (isSnowgirlMode) {
                             backButton.style.display = 'inline-block';
@@ -623,7 +627,7 @@
             backButton.style.display = 'inline-block';
             
             // Показываем сообщение
-            showMessage('🎀 Режим самой милой активирован! Все такое розовое! 💖', '#ff69b4');
+            showMessage('🎀 Режим самой милой активирован! Все такое розовое и милое! 💖', '#ff69b4');
             
             // Добавляем конфетти
             createPinkConfetti();
