@@ -6,12 +6,13 @@
     <title>Письмо Дедушке Морозу</title>
     <style>
         body {
-            background: linear-gradient(rgba(173, 216, 230, 0.8), rgba(240, 248, 255, 0.8)), 
-                        url('https://images.unsplash.com/photo-1482517967863-00e15c9b44be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background: url('1676726942_catherineasquithgallery-com-p-novogodnie-oboi-na-zelenom-fone-206.jpg');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             font-family: 'Arial', sans-serif;
-            color: #2c5530;
+            color: #153235; /* Темно-зеленый текст */
             text-align: center;
             padding: 20px;
             margin: 0;
@@ -26,13 +27,24 @@
             max-width: 600px;
             padding: 40px;
             transition: all 0.5s ease;
+            background: rgba(102, 137, 116, 0.8); /* #668974 с прозрачностью */
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(29, 65, 57, 0.3); /* #1d4139 */
         }
 
         h1 {
-            color: #c41e3a;
+            color: #ffffff; /* Белый текст */
             font-size: 3em;
             margin-bottom: 30px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            text-shadow: 
+                2px 2px 0 #1d4139,
+                -2px -2px 0 #1d4139,
+                2px -2px 0 #1d4139,
+                -2px 2px 0 #1d4139,
+                0px 2px 0 #1d4139,
+                2px 0px 0 #1d4139,
+                0px -2px 0 #1d4139,
+                -2px 0px 0 #1d4139; /* Обводка темно-зеленым */
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -42,21 +54,21 @@
         }
 
         .description {
-            color: #2c5530;
+            color: #153235; /* Темно-зеленый */
             font-size: 1.4em;
             line-height: 1.6;
             margin: 40px 0;
             text-align: center;
-            background: rgba(196, 30, 58, 0.1);
+            background: rgba(41, 91, 87, 0.3); /* #295b57 */
             padding: 30px;
             border-radius: 20px;
-            border-left: 5px solid #c41e3a;
+            border-left: 5px solid #1d4139; /* Темно-зеленый */
             backdrop-filter: blur(5px);
             transition: all 0.5s ease;
         }
 
         .mail-button {
-            background: linear-gradient(45deg, #90c695, #c41e3a);
+            background: linear-gradient(45deg, #295b57, #1d4139); /* Зеленая гамма */
             color: white;
             padding: 25px 60px;
             border: none;
@@ -66,26 +78,27 @@
             cursor: pointer;
             margin: 30px 0;
             transition: all 0.3s;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(29, 65, 57, 0.3);
             display: inline-block;
             width: auto;
+            border: 2px solid #153235;
         }
 
         .mail-button:hover {
-            background: linear-gradient(45deg, #c41e3a, #90c695);
+            background: linear-gradient(45deg, #1d4139, #295b57);
             transform: scale(1.1);
         }
 
         .letter-form {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(102, 137, 116, 0.95); /* #668974 */
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(29, 65, 57, 0.3);
             margin-top: 30px;
             text-align: left;
             position: relative;
-            border: 3px solid #c41e3a;
+            border: 3px solid #1d4139; /* Темно-зеленый */
             transition: all 0.5s ease;
         }
 
@@ -97,9 +110,13 @@
             border: none;
             font-size: 1.5em;
             cursor: pointer;
-            color: #c41e3a;
+            color: #1d4139; /* Темно-зеленый */
             font-weight: bold;
             transition: all 0.3s;
+        }
+
+        .close-button:hover {
+            color: #153235; /* Более темный зеленый при наведении */
         }
 
         .form-group {
@@ -110,7 +127,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #2c5530;
+            color: #153235; /* Темно-зеленый */
             transition: all 0.5s ease;
         }
 
@@ -118,16 +135,23 @@
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid #90c695;
+            border: 2px solid #295b57; /* Средне-зеленый */
             border-radius: 10px;
             font-size: 1em;
             box-sizing: border-box;
             transition: all 0.5s ease;
             font-family: 'Arial', sans-serif;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #1d4139; /* Темно-зеленый */
+            outline: none;
         }
 
         .submit-button {
-            background: linear-gradient(45deg, #90c695, #c41e3a);
+            background: linear-gradient(45deg, #295b57, #1d4139); /* Зеленая гамма */
             color: white;
             padding: 15px 40px;
             border: none;
@@ -139,18 +163,24 @@
             display: block;
             transition: all 0.5s ease;
             width: auto;
+            border: 2px solid #153235;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(45deg, #1d4139, #295b57);
+            transform: scale(1.05);
         }
 
         .success-message {
             display: none;
-            background: rgba(144, 198, 149, 0.95);
-            color: #2c5530;
+            background: rgba(41, 91, 87, 0.9); /* #295b57 */
+            color: #ffffff;
             padding: 25px;
             border-radius: 15px;
             margin-top: 20px;
             font-weight: bold;
             font-size: 1.2em;
-            border: 2px solid #2c5530;
+            border: 2px solid #1d4139;
             transition: all 0.5s ease;
         }
 
@@ -161,9 +191,9 @@
         }
 
         .loading-spinner {
-            border: 4px solid rgba(196, 30, 58, 0.3);
+            border: 4px solid rgba(29, 65, 57, 0.3);
             border-radius: 50%;
-            border-top: 4px solid #c41e3a;
+            border-top: 4px solid #1d4139;
             width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
@@ -186,7 +216,7 @@
         }
 
         .secret-button {
-            background: linear-gradient(45deg, #ffb6c1, #ff69b4);
+            background: linear-gradient(45deg, #ffb6c1, #ff69b4); /* Розовая оставил */
             color: white;
             padding: 15px 30px;
             border: none;
@@ -206,7 +236,7 @@
         }
 
         .back-button {
-            background: linear-gradient(45deg, #c41e3a, #2c5530);
+            background: linear-gradient(45deg, #1d4139, #295b57); /* Зеленая */
             color: white;
             padding: 15px 30px;
             border: none;
@@ -221,7 +251,7 @@
         }
 
         .back-button:hover {
-            background: linear-gradient(45deg, #2c5530, #c41e3a);
+            background: linear-gradient(45deg, #295b57, #1d4139);
             transform: scale(1.05);
         }
 
@@ -232,25 +262,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(29, 65, 57, 0.7); /* Темно-зеленый */
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
 
         .hint-content {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(102, 137, 116, 0.95); /* #668974 */
             padding: 25px;
             border-radius: 15px;
             text-align: center;
-            border: 3px solid #ff69b4;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border: 3px solid #1d4139;
+            box-shadow: 0 8px 25px rgba(29, 65, 57, 0.3);
             max-width: 400px;
             margin: 20px;
         }
 
         .hint-close-button {
-            background: #ff69b4;
+            background: #1d4139;
             color: white;
             border: none;
             padding: 10px 25px;
@@ -260,12 +290,23 @@
             margin-top: 15px;
         }
 
+        .hint-close-button:hover {
+            background: #295b57;
+        }
+
+        /* РЕЖИМ СНЕГУРОЧКИ */
         .snowgirl-mode {
-            background: linear-gradient(135deg, #ffebf3, #ffe6f2, #ffd6e9) !important;
+            background: url('snegurka1.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
         }
 
         .snowgirl-mode .content {
             color: #b3005e;
+            background: rgba(255, 255, 255, 0.6) !important; /* БОЛЕЕ ПРОЗРАЧНАЯ */
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
 
         .snowgirl-mode h1 {
@@ -274,7 +315,7 @@
         }
 
         .snowgirl-mode .description {
-            background: rgba(255, 182, 193, 0.3) !important;
+            background: rgba(255, 182, 193, 0.2) !important; /* БОЛЕЕ ПРОЗРАЧНАЯ */
             border-left: 5px solid #ff69b4 !important;
             color: #b3005e !important;
             backdrop-filter: blur(10px);
@@ -284,6 +325,7 @@
         .snowgirl-mode .submit-button {
             background: linear-gradient(45deg, #ff66b2, #ff99cc) !important;
             box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+            border: 2px solid #ff69b4;
         }
 
         .snowgirl-mode .mail-button:hover,
@@ -292,7 +334,7 @@
         }
 
         .snowgirl-mode .letter-form {
-            background: rgba(255, 255, 255, 0.98) !important;
+            background: rgba(255, 255, 255, 0.85) !important; /* БОЛЕЕ ПРОЗРАЧНАЯ */
             border: 3px solid #ff69b4 !important;
             box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
@@ -319,7 +361,7 @@
         }
 
         .snowgirl-mode .success-message {
-            background: rgba(255, 182, 193, 0.3) !important;
+            background: rgba(255, 182, 193, 0.2) !important; /* БОЛЕЕ ПРОЗРАЧНАЯ */
             border: 2px solid #ff69b4 !important;
             color: #b3005e !important;
         }
@@ -369,7 +411,7 @@
         <!-- Форма для письма -->
         <form class="letter-form" id="letterForm">
             <button type="button" class="close-button" id="closeFormButton">✕</button>
-            <div style="color: #c41e3a; text-align: center; font-size: 1.8em; margin-bottom: 25px; transition: all 0.5s ease;" id="formTitle">✉️ Твое письмо</div>
+            <div style="color: #1d4139; text-align: center; font-size: 1.8em; margin-bottom: 25px; transition: all 0.5s ease;" id="formTitle">✉️ Твое письмо</div>
             
             <div class="form-group">
                 <label for="name" id="nameLabel">🎅 Твое имя:</label>
@@ -411,7 +453,7 @@
         <!-- Оверлей подсказки -->
         <div class="hint-overlay" id="hintOverlay">
             <div class="hint-content">
-                <div style="color: #b3005e; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
+                <div style="color: #153235; font-size: 1.2em; line-height: 1.5; margin-bottom: 15px;">
                     ✨ Тапни три раза на заголовок!👆<br>
                 </div>
                 <button class="hint-close-button" id="hintCloseButton">Понятно!</button>
@@ -585,7 +627,7 @@
                 if (!isSnowgirlMode) {
                     showMessage(`✨ ${tapCount}/3 для секрета!`, '#ff69b4');
                 } else {
-                    showMessage(`🎅 ${tapCount}/3 к Деду Морозу!`, '#c41e3a');
+                    showMessage(`🎅 ${tapCount}/3 к Деду Морозу!`, '#1d4139');
                 }
                 
                 if (tapCount === 3) {
@@ -612,7 +654,7 @@
         function activateSnowGirlMode() {
             isSnowgirlMode = true;
             
-            // Включаем розовую тему
+            // Включаем розовую тему с фоновым изображением Снегурочки
             document.body.classList.add('snowgirl-mode');
             
             // Меняем заголовок
@@ -626,7 +668,7 @@
             backButton.style.display = 'inline-block';
             
             // Показываем сообщение
-            showMessage('🎀 Режим самой милой активирован! Все такое розовое! 💖', '#ff69b4');
+            showMessage('🎀 Режим Снегурочки активирован! Все такое розовое! 💖', '#ff69b4');
             
             // Добавляем конфетти
             createPinkConfetti();
@@ -649,7 +691,7 @@
             backButton.style.display = 'none';
             
             // Показываем сообщение
-            showMessage('🎅 Вернулись к Деду Морозу!', '#c41e3a');
+            showMessage('🎅 Вернулись к Деду Морозу!', '#1d4139');
         }
 
         function createPinkConfetti() {
