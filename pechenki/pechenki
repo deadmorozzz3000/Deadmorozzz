@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 Рецепты от Деда Мороза 🎄</title>
+    <style>
+        body {
+            background: url('fonpech.jpg') center/cover no-repeat fixed;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #c41e3a;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #2c5530;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .recipe-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 250, 240, 0.6);
+            border: 3px solid #ff9966;
+        }
+
+        .recipe-title {
+            color: #8B4513;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .ingredients {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .ingredient {
+            text-align: center;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            width: 100px;
+        }
+
+        .ingredient:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .ingredient.used {
+            opacity: 0.4;
+            transform: scale(0.8);
+            cursor: default;
+        }
+
+        .ingredient-emoji {
+            font-size: 3em;
+            margin-bottom: 5px;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 5px;
+        }
+
+        .ingredient-emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .ingredient-name {
+            font-size: 0.9em;
+            color: #5d4037;
+            font-weight: bold;
+        }
+
+        .ingredient-amount {
+            font-size: 0.8em;
+            color: #795548;
+            margin-top: 3px;
+        }
+
+        .mixing-bowl {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(141, 110, 99, 0.7), rgba(161, 136, 127, 0.7));
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            border: 10px solid rgba(93, 64, 55, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .bowl-content {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: rgba(139, 69, 19, 0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .bowl-emoji {
+            font-size: 1.5em;
+            animation: popIn 0.5s ease-out;
+            width: 30px;
+            height: 30px;
+        }
+
+        .bowl-emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .steps {
+            margin: 30px 0;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ff9966;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-number {
+            background: #ff9966;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .step-content {
+            margin-left: 40px;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, rgba(76, 175, 80, 0.8), rgba(69, 160, 73, 0.8));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .next-btn:disabled {
+            background: rgba(204, 204, 204, 0.8);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cooking-animation {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .cooking-animation.active {
+            display: block;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .oven, .mug, .kastrulya {
+            font-size: 4em;
+            margin: 10px;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+
+        .oven img, .mug img, .kastrulya img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .steam {
+            font-size: 2em;
+            animation: steam 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes steam {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, rgba(255, 235, 59, 0.8), rgba(255, 152, 0, 0.8));
+            border-radius: 15px;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .final-emoji {
+            font-size: 4em;
+            margin: 10px;
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+        }
+
+        .final-emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .cooking-timer {
+            font-size: 1.5em;
+            text-align: center;
+            margin: 20px 0;
+            color: #c41e3a;
+            font-weight: bold;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #5d4037;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .all-added {
+            text-align: center;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .all-added.active {
+            display: block;
+            animation: bounce 0.5s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            80% { transform: translateY(-5px); }
+        }
+
+        .recipe-tip {
+            background: rgba(227, 242, 253, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎄 Вкусные рецепты от Деда Мороза! 🎄</h1>
+        <p class="subtitle">Нажимай на ингредиенты и следуй рецепту шаг за шагом!</p>
+
+        <!-- Пряники -->
+        <div class="recipe-section">
+            <h2 class="recipe-title">🍪 Имбирные пряники</h2>
+            
+            <p class="instruction">Нажми на все ингредиенты чтобы добавить их в миску!</p>
+            <div class="all-added" id="gingerbreadAllAdded">✅ Все ингредиенты добавлены! Нажми "Дальше"</div>
+            
+            <div class="ingredients" id="gingerbreadIngredients">
+                <div class="ingredient" data-emoji="🌾" data-name="Мука" data-amount="500 г" data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="flour.svg" alt="Мука">
+                    </div>
+                    <div class="ingredient-name">Мука</div>
+                    <div class="ingredient-amount">500 г</div>
+                </div>
+                <div class="ingredient" data-emoji="🍯" data-name="Мёд" data-amount="200 г" data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="honey.svg" alt="Мёд">
+                    </div>
+                    <div class="ingredient-name">Мёд</div>
+                    <div class="ingredient-amount">200 г</div>
+                </div>
+                <div class="ingredient" data-emoji="🧈" data-name="Масло" data-amount="150 г" data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="butter.svg" alt="Масло">
+                    </div>
+                    <div class="ingredient-name">Масло</div>
+                    <div class="ingredient-amount">150 г</div>
+                </div>
+                <div class="ingredient" data-emoji="🥚" data-name="Яйцо" data-amount="2 шт" data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="egg.svg" alt="Яйцо">
+                    </div>
+                    <div class="ingredient-name">Яйцо</div>
+                    <div class="ingredient-amount">2 шт</div>
+                </div>
+                <div class="ingredient" data-emoji="🫚" data-name="Имбирь" data-amount="2 ч.л." data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="ginger.svg" alt="Имбирь">
+                    </div>
+                    <div class="ingredient-name">Имбирь</div>
+                    <div class="ingredient-amount">2 ч.л.</div>
+                </div>
+                <div class="ingredient" data-emoji="🍬" data-name="Специи" data-amount="1 ч.л." data-recipe="gingerbread">
+                    <div class="ingredient-emoji">
+                        <img src="spices.svg" alt="Специи">
+                    </div>
+                    <div class="ingredient-name">Специи</div>
+                    <div class="ingredient-amount">1 ч.л.</div>
+                </div>
+            </div>
+
+            <div class="mixing-bowl" id="gingerbreadBowl">
+                <div class="bowl-content" id="gingerbreadContent">
+                    <img src="flour.svg" alt="Пряник" width="40" height="40">
+                </div>
+            </div>
+
+            <button class="next-btn" id="gingerbreadNextBtn" disabled>Дальше →</button>
+
+            <div class="steps">
+                <div class="step" id="gingerbreadStep1">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <strong>Смешиваем сухие ингредиенты:</strong><br>
+                        Просеиваем 500 г муки, добавляем 2 ч.л. молотого имбиря и 1 ч.л. смеси специй (корица, мускатный орех, гвоздика)
+                    </div>
+                </div>
+                <div class="step" id="gingerbreadStep2">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <strong>Готовим медовую смесь:</strong><br>
+                        Растапливаем 150 г сливочного масла с 200 г мёда на водяной бане. Остужаем до комнатной температуры и добавляем 2 яйца, взбивая венчиком
+                    </div>
+                </div>
+                <div class="step" id="gingerbreadStep3">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <strong>Замешиваем тесто:</strong><br>
+                        Соединяем сухие и жидкие ингредиенты, вымешиваем мягкое тесто. Заворачиваем в плёнку и убираем в холодильник на 1 час
+                    </div>
+                </div>
+                <div class="step" id="gingerbreadStep4">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <strong>Формируем пряники:</strong><br>
+                        Раскатываем тесто толщиной 5-7 мм, вырезаем фигурки формочками
+                        <div class="recipe-tip">💡 Совет: смажьте формочки растительным маслом, чтобы тесто не прилипало</div>
+                    </div>
+                </div>
+                
+                <div class="cooking-animation" id="gingerbreadCooking">
+                    <div class="oven">
+                        <img src="plita.svg" alt="Плита">
+                    </div>
+                    <div class="steam">💨</div>
+                    <div class="cooking-timer">Выпекаем при 180°C: 10-12 минут ⏰</div>
+                </div>
+
+                <div class="step" id="gingerbreadStep5">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <strong>Украшаем:</strong><br>
+                        Готовим глазурь: 1 белок + 150 г сахарной пудры. Украшаем остывшие пряники
+                        <div class="recipe-tip">🎨 Можно добавить пищевые красители в глазурь для разноцветных украшений</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result" id="gingerbreadResult">
+                <div class="final-emoji">
+                    <img src="pechenko.svg" alt="Пряники готовы">
+                </div>
+                <h3>Пряники готовы! ✨</h3>
+                <p>Ароматные, хрустящие и очень вкусные!<br>Выход: около 30-35 пряников</p>
+            </div>
+        </div>
+
+        <!-- Горячий шоколад -->
+        <div class="recipe-section">
+            <h2 class="recipe-title">☕ Горячий шоколад</h2>
+            
+            <p class="instruction">Нажми на все ингредиенты чтобы добавить их в миску!</p>
+            <div class="all-added" id="chocolateAllAdded">✅ Все ингредиенты добавлены! Нажми "Дальше"</div>
+            
+            <div class="ingredients" id="chocolateIngredients">
+                <div class="ingredient" data-emoji="🍫" data-name="Шоколад" data-amount="150 г" data-recipe="chocolate">
+                    <div class="ingredient-emoji">
+                        <img src="chocolate.svg" alt="Шоколад">
+                    </div>
+                    <div class="ingredient-name">Шоколад</div>
+                    <div class="ingredient-amount">150 г</div>
+                </div>
+                <div class="ingredient" data-emoji="🥛" data-name="Молоко" data-amount="500 мл" data-recipe="chocolate">
+                    <div class="ingredient-emoji">
+                        <img src="milk.svg" alt="Молоко">
+                    </div>
+                    <div class="ingredient-name">Молоко</div>
+                    <div class="ingredient-amount">500 мл</div>
+                </div>
+                <div class="ingredient" data-emoji="🍦" data-name="Сливки" data-amount="100 мл" data-recipe="chocolate">
+                    <div class="ingredient-emoji">
+                        <img src="cream.svg" alt="Сливки">
+                    </div>
+                    <div class="ingredient-name">Сливки</div>
+                    <div class="ingredient-amount">100 мл</div>
+                </div>
+                <div class="ingredient" data-emoji="🍯" data-name="Мёд" data-amount="2 ст.л." data-recipe="chocolate">
+                    <div class="ingredient-emoji">
+                        <img src="honey.svg" alt="Мёд">
+                    </div>
+                    <div class="ingredient-name">Мёд</div>
+                    <div class="ingredient-amount">2 ст.л.</div>
+                </div>
+                <div class="ingredient" data-emoji="🌰" data-name="Ваниль" data-amount="1 ч.л." data-recipe="chocolate">
+                    <div class="ingredient-emoji">
+                        <img src="vanilla.svg" alt="Ваниль">
+                    </div>
+                    <div class="ingredient-name">Ваниль</div>
+                    <div class="ingredient-amount">1 ч.л.</div>
+                </div>
+            </div>
+
+            <div class="mixing-bowl" id="chocolateBowl">
+                <div class="bowl-content" id="chocolateContent">
+                    <img src="chocolate.svg" alt="Шоколад" width="40" height="40">
+                </div>
+            </div>
+
+            <button class="next-btn" id="chocolateNextBtn" disabled>Дальше →</button>
+
+            <div class="steps">
+                <div class="step" id="chocolateStep1">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <strong>Подготавливаем шоколад:</strong><br>
+                        150 г тёмного шоколада поломайте на мелкие кусочки для быстрого растворения
+                    </div>
+                </div>
+                <div class="step" id="chocolateStep2">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <strong>Нагреваем молоко:</strong><br>
+                        В кастрюле нагреваем 500 мл молока, но не доводим до кипения. Добавляем 100 мл сливок 20% жирности
+                    </div>
+                </div>
+                <div class="step" id="chocolateStep3">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <strong>Растворяем шоколад:</strong><br>
+                        Убираем кастрюлю с огня, добавляем шоколад и помешиваем до полного растворения
+                        <div class="recipe-tip">🔥 Не кипятите молоко с шоколадом - он может свернуться</div>
+                    </div>
+                </div>
+                
+                <div class="cooking-animation" id="chocolateCooking">
+                    <div class="kastrulya">
+                        <img src="kastrulya.svg" alt="Кастрюля">
+                    </div>
+                    <div class="steam">💨</div>
+                    <div class="steam">💨</div>
+                    <div class="cooking-timer">Доводим до идеальной температуры ⏰</div>
+                </div>
+
+                <div class="step" id="chocolateStep4">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <strong>Добавляем ароматы:</strong><br>
+                        Вмешиваем 2 ст.л. мёда и 1 ч.л. ванильного экстракта. По желанию - щепотку соли для раскрытия вкуса
+                    </div>
+                </div>
+                <div class="step" id="chocolateStep5">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <strong>Подаём:</strong><br>
+                        Разливаем по кружкам, украшаем взбитыми сливками, тёртым шоколадом или зефирками
+                        <div class="recipe-tip">🍭 Для детей можно добавить немного маршмэллоу - они растают и создадут кремовую текстуру</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result" id="chocolateResult">
+                <div class="final-emoji">
+                    <img src="hotchoko.svg" alt="Горячий шоколад готов">
+                </div>
+                <h3>Шоколад готов! ✨</h3>
+                <p>Ароматный, нежный и согревающий!<br>Порции: 2-3 кружки</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Простые счетчики для каждого рецепта
+        let gingerbreadCount = 0;
+        let chocolateCount = 0;
+
+        // Обработчики для пряников
+        document.querySelectorAll('[data-recipe="gingerbread"]').forEach(ingredient => {
+            ingredient.addEventListener('click', function() {
+                if (!this.classList.contains('used')) {
+                    this.classList.add('used');
+                    gingerbreadCount++;
+                    
+                    // Добавляем эмодзи в миску
+                    const bowlContent = document.getElementById('gingerbreadContent');
+                    const emojiElement = document.createElement('div');
+                    emojiElement.className = 'bowl-emoji';
+                    emojiElement.innerHTML = this.querySelector('.ingredient-emoji').innerHTML;
+                    bowlContent.appendChild(emojiElement);
+                    
+                    // Проверяем, все ли ингредиенты добавлены
+                    if (gingerbreadCount === 6) {
+                        document.getElementById('gingerbreadAllAdded').classList.add('active');
+                        document.getElementById('gingerbreadNextBtn').disabled = false;
+                    }
+                }
+            });
+        });
+
+        // Обработчики для шоколада
+        document.querySelectorAll('[data-recipe="chocolate"]').forEach(ingredient => {
+            ingredient.addEventListener('click', function() {
+                if (!this.classList.contains('used')) {
+                    this.classList.add('used');
+                    chocolateCount++;
+                    
+                    // Добавляем эмодзи в миску
+                    const bowlContent = document.getElementById('chocolateContent');
+                    const emojiElement = document.createElement('div');
+                    emojiElement.className = 'bowl-emoji';
+                    emojiElement.innerHTML = this.querySelector('.ingredient-emoji').innerHTML;
+                    bowlContent.appendChild(emojiElement);
+                    
+                    // Проверяем, все ли ингредиенты добавлены
+                    if (chocolateCount === 5) {
+                        document.getElementById('chocolateAllAdded').classList.add('active');
+                        document.getElementById('chocolateNextBtn').disabled = false;
+                    }
+                }
+            });
+        });
+
+        // Кнопки "Дальше" для пряников
+        let gingerbreadStep = 0;
+        document.getElementById('gingerbreadNextBtn').addEventListener('click', function() {
+            gingerbreadStep++;
+            
+            if (gingerbreadStep === 1) {
+                document.getElementById('gingerbreadStep1').classList.add('active');
+            } else if (gingerbreadStep === 2) {
+                document.getElementById('gingerbreadStep2').classList.add('active');
+            } else if (gingerbreadStep === 3) {
+                document.getElementById('gingerbreadStep3').classList.add('active');
+            } else if (gingerbreadStep === 4) {
+                document.getElementById('gingerbreadStep4').classList.add('active');
+                document.getElementById('gingerbreadCooking').classList.add('active');
+                
+                // Имитируем процесс выпечки
+                setTimeout(() => {
+                    document.getElementById('gingerbreadStep5').classList.add('active');
+                    this.textContent = 'Завершить';
+                }, 3000);
+            } else if (gingerbreadStep === 5) {
+                document.getElementById('gingerbreadResult').classList.add('active');
+                this.style.display = 'none';
+            }
+        });
+
+        // Кнопки "Дальше" для шоколада
+        let chocolateStep = 0;
+        document.getElementById('chocolateNextBtn').addEventListener('click', function() {
+            chocolateStep++;
+            
+            if (chocolateStep === 1) {
+                document.getElementById('chocolateStep1').classList.add('active');
+            } else if (chocolateStep === 2) {
+                document.getElementById('chocolateStep2').classList.add('active');
+            } else if (chocolateStep === 3) {
+                document.getElementById('chocolateStep3').classList.add('active');
+                document.getElementById('chocolateCooking').classList.add('active');
+                
+                // Имитируем процесс нагревания
+                setTimeout(() => {
+                    document.getElementById('chocolateStep4').classList.add('active');
+                }, 2000);
+            } else if (chocolateStep === 4) {
+                document.getElementById('chocolateStep5').classList.add('active');
+                this.textContent = 'Завершить';
+            } else if (chocolateStep === 5) {
+                document.getElementById('chocolateResult').classList.add('active');
+                this.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
