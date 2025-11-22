@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 Подарки от Деда Мороза</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url('fon.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(49, 26, 12, 0.7);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            color: #fff;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #d59161;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .header h1:hover {
+            transform: scale(1.02);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .telegram-notice {
+            background: rgba(124, 178, 176, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #7cb2b0;
+            margin: 20px auto;
+            max-width: 500px;
+            color: #d59161;
+            font-size: 1.1em;
+        }
+
+        .auth-container {
+            background: rgba(213, 145, 97, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #d59161;
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #d59161;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1em;
+        }
+
+        .auth-input::placeholder {
+            color: #d59161;
+        }
+
+        .auth-btn {
+            background: linear-gradient(45deg, #d59161, #c81d28);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #d59161;
+        }
+
+        .user-info {
+            background: rgba(213, 145, 97, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #d59161;
+            margin: 20px auto;
+            max-width: 400px;
+            color: white;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #c81d28, #954227);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px #c81d28;
+        }
+
+        .timer-container {
+            background: rgba(213, 145, 97, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #d59161;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .timer {
+            font-size: 1.3em;
+            color: #d59161;
+            font-weight: bold;
+        }
+
+        .timer-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .gifts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .gift {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, rgba(200, 29, 40, 0.4), rgba(149, 66, 39, 0.4));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(200, 29, 40, 0.15);
+            margin: 0 auto;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .gift.available:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(200, 29, 40, 0.25);
+            background: linear-gradient(45deg, rgba(200, 29, 40, 0.6), rgba(149, 66, 39, 0.6));
+        }
+
+        .gift.locked {
+            background: linear-gradient(45deg, rgba(70, 103, 84, 0.3), rgba(32, 81, 78, 0.3));
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+
+        .gift.locked::before {
+            content: '🔒';
+            font-size: 2em;
+        }
+
+        .gift.available::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background-image: url('christmas-gift.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(1px 1px 3px rgba(0,0,0,0.15)) opacity(0.8);
+            transition: filter 0.3s ease;
+        }
+
+        .gift.available:hover::before {
+            filter: drop-shadow(2px 2px 6px rgba(0,0,0,0.3)) opacity(1);
+        }
+
+        .gift.opened {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .gift-collected {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .gift-collected .gift-svg {
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.8;
+        }
+
+        .gift-collected::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            width: 60px;
+            height: 20px;
+            margin: 0 auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #311a0c, #662b15);
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #d59161;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            color: white;
+            box-shadow: 0 0 50px #d59161;
+        }
+
+        .modal h2 {
+            color: #d59161;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .modal p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .prize-image {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 10px rgba(213, 145, 97, 0.5));
+        }
+
+        .close-btn {
+            background: linear-gradient(45deg, #d59161, #c81d28);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #d59161;
+        }
+
+        .counter {
+            color: #d59161;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(213, 145, 97, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid #d59161;
+        }
+
+        .collection-progress {
+            margin-top: 20px;
+            color: #d59161;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(213, 145, 97, 0.2);
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #d59161, #c81d28);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .dev-tooltip {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #d59161;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .gifts-container {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 15px;
+            }
+            
+            .gift, .gift-collected {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .gift-collected .gift-svg {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .prize-image {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat-item {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dev-tooltip" id="devTooltip"></div>
+    
+    <div class="container">
+        <div class="auth-container" id="authContainer" style="display: none;">
+            <h3>Вход в мастерскую</h3>
+            <div class="auth-form" id="loginForm">
+                <input type="text" class="auth-input" id="loginUsername" placeholder="Логин" required>
+                <input type="password" class="auth-input" id="loginPassword" placeholder="Пароль" required>
+                <button class="auth-btn" onclick="login()">Войти</button>
+            </div>
+        </div>
+
+        <div class="user-info" id="userInfo" style="display: none;">
+            <h3>Добро пожаловать, <span id="userDisplayName">Пользователь</span>! 🎅</h3>
+            <p>Ваш прогресс сохранен в облаке</p>
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
+
+        <div class="header" id="mainContent" style="display: none;">
+            <h1 id="mainTitle"> Подарочная мастерская Деда Мороза</h1>
+            <p>Собирай подарки - каждый можно получить только один раз.</p>
+            
+            <div class="telegram-notice">
+                💫 Команда дедушки рекомендует
+                открывать в случайном порядке!
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer-label">До следующего подарка осталось:</div>
+                <div class="timer" id="nextGiftTimer">00:00:00</div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    📦 Всего подарков: <strong>30</strong>
+                </div>
+                <div class="stat-item">
+                    🎁 Открыто сегодня: <strong id="openedToday">0</strong>
+                </div>
+                <div class="stat-item">
+                    📅 Всего собрано: <strong id="totalOpened">0</strong>/30
+                </div>
+            </div>
+
+            <div class="collection-progress">
+                <div>Прогресс коллекции:</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div id="progressText">0% собрано</div>
+            </div>
+        </div>
+
+        <div class="gifts-container" id="giftsContainer" style="display: none;">
+        </div>
+    </div>
+
+    <div class="modal" id="prizeModal">
+        <div class="modal-content">
+            <div class="prize-image" id="prizeImage"></div>
+            <h2 id="prizeTitle">Новый подарок!</h2>
+            <div id="prizeDescription"></div>
+            <button class="close-btn" onclick="closeModal()">Понятно!</button>
+        </div>
+    </div>
+
+    <script>
+        // Список разрешенных пользователей
+        const ALLOWED_USERS = {
+            'test3': 'test3',
+            'test4': 'test4',
+            'test5': 'test5',
+            'lesha': 'iris',
+            'polina': 'dior'
+        };
+
+        const CURRENT_USER_KEY = 'santa_current_user';
+
+        const gifts = [
+            { id: 1, emoji: "🍫", title: "Шоколадка", description: "Да ну??? Серьезно? Охренеть!" },
+            { id: 2, emoji: "🍭", title: "Набор леденцов", description: "Как шутят миллениалы, какой год - такой и подарок..." },
+            { id: 3, emoji: "🍪", title: "Пряничный человечек", description: "О нет, теперь ты каннибал!" },
+            { id: 4, emoji: "🍷", title: "Набор для глинтвейна", description: "Вари на соке, не наглей" },
+            { id: 5, emoji: "🍵", title: "Новогодний чай", description: "Попей чайок, год никуда не убежит" },
+            { id: 6, emoji: "🍊", title: "Мандарины от оленей", description: "ДАЕШЬ ДИАТЕЗ!!! ДАЕШЬ ОБОЖРАТЬСЯ МАНДАРИНОВ!!! Напиши дедушке в сообщения канала." },
+            { id: 7, emoji: "🥨", title: "Печенье от Снегурочки", description: "Пекла не сама, конечно, она не для кухни, а для красоты" },
+            { id: 8, emoji: "🍯", title: "Мед-мини", description: "Иду по лесу, вижу, медведь мед жрет, отобрал у него, дарю тебе" },
+            { id: 9, emoji: "🍬", title: "Конфетки", description: "Без яда, честно, вкусные, это уже не очень честно" },
+            { id: 10, emoji: "☁️", title: "Маршмеллоу", description: "Чтобы слипалось бодрее и быстрее!" },
+            { id: 11, emoji: "🔶", title: "Мини-шоколад", description: "Большую еще хорошим поведением заслужить надо, а ты как себя ведешь?" },
+            { id: 12, emoji: "🎄", title: "Пряники", description: "Может слипнется. Может нет. " },
+            { id: 13, emoji: "🌲", title: "Варенье из еловых шишек", description: "Лично со зверьем в лесу дрался за эти шишки, зуб даю! Потерянный в бою." },
+            { id: 14, emoji: "☕", title: "Горячий шокалад", description: "Но не горячее тебя 😏" },
+            { id: 15, emoji: "🧁", title: "Новогодний кекс", description: "Надеюсь, у тебя нет аллергии на что-нибудь" },
+            { id: 16, emoji: "🎀", title: "Ёлочная игрушка с твоим изображением", description: "Так уж и быть, повесишь на елку то, что тебе нравится! Картинку шли в сообщения канала дедушки" },
+            { id: 17, emoji: "🧦", title: "Новогодний носок с подарками", description: "Подарки на усмотрение Деда. Возможно, не угли." },
+            { id: 18, emoji: "✂️", title: "Набор для поделок", description: "Сделай что-нибудь полезное руками в этом году" },
+            { id: 19, emoji: "🦌", title: "Брелок-олень", description: "Если потеряешь - обратно не прискочет, это тебе не голубь" },
+            { id: 20, emoji: "🕯️", title: "Свеча с запахом праздника", description: "Закошмарь всех своим новогодним вайбом" },
+            { id: 21, emoji: "📱", title: "Стикерпак", description: "Только не откладывай его на потом!!!" },
+            { id: 22, emoji: "😴", title: "Маска для сна", description: "Высыпайся, тебя ждет следующий год" },
+            { id: 23, emoji: "🌲", title: "Мини-ёлка", description: "Демо-версия настоящей" },
+            { id: 24, emoji: "📓", title: "Блокнот для желаний", description: "Чтобы к следующему году Дед продал почку от твоих запросов" },
+            { id: 25, emoji: "🧦", title: "Тёплые носки", description: "Болеть вредно, не болеть полезно" },
+            { id: 26, emoji: "💄", title: "Бальзам для губ", description: "Не думаю, что тебе нравится морозный поцелуй 😈" },
+            { id: 27, emoji: "🧩", title: "Деревянная игрушка", description: "Вау, даже не прибитая к полу!" },
+            { id: 28, emoji: "☕", title: "Кружка", description: "Нечего в лесу рубить, не ты сажал, не тебе рубить, свою расти, сказал бы я, если бы тут был набор для выращивания, но Снегурочка запретила, поменяли на кружку" },
+            { id: 29, emoji: "🌸", title: "Аромат для дома", description: "Перебьем запах предновогодней заебанности!" },
+            { id: 30, emoji: "🔮", title: "Снежный шар", description: " Не с какающим котиком" }
+        ];
+
+        function getUserStorageKey(username, key) {
+            return `santa_${username}_${key}`;
+        }
+
+        let currentUser = null;
+        let collectedGifts = [];
+        let todayOpened = 0;
+        let canOpenGift = true;
+        let cooldownEndTime = 0;
+
+        const authContainer = document.getElementById('authContainer');
+        const userInfo = document.getElementById('userInfo');
+        const mainContent = document.getElementById('mainContent');
+        const giftsContainer = document.getElementById('giftsContainer');
+        const nextGiftTimer = document.getElementById('nextGiftTimer');
+        const openedToday = document.getElementById('openedToday');
+        const totalOpenedElement = document.getElementById('totalOpened');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const mainTitle = document.getElementById('mainTitle');
+        const devTooltip = document.getElementById('devTooltip');
+        const userDisplayName = document.getElementById('userDisplayName');
+        const prizeImage = document.getElementById('prizeImage');
+
+        function init() {
+            checkAuth();
+        }
+
+        function checkAuth() {
+            const savedUser = localStorage.getItem(CURRENT_USER_KEY);
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showUserInterface();
+                loadUserProgress();
+            } else {
+                showAuthInterface();
+            }
+        }
+
+        function showAuthInterface() {
+            authContainer.style.display = 'block';
+            userInfo.style.display = 'none';
+            mainContent.style.display = 'none';
+            giftsContainer.style.display = 'none';
+        }
+
+        function showUserInterface() {
+            authContainer.style.display = 'none';
+            userInfo.style.display = 'block';
+            mainContent.style.display = 'block';
+            giftsContainer.style.display = 'grid';
+            
+            userDisplayName.textContent = currentUser.username;
+            updateProgressBar();
+            startTimer();
+            renderGifts();
+            setupSecretFeature();
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            if (!username || !password) {
+                alert('Заполните все поля!');
+                return;
+            }
+
+            // Проверяем наличие пользователя в списке разрешенных
+            if (!ALLOWED_USERS[username] || ALLOWED_USERS[username] !== password) {
+                alert('Неверный логин или пароль!');
+                return;
+            }
+
+            currentUser = { username: username };
+            localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+            
+            showUserInterface();
+            loadUserProgress();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem(CURRENT_USER_KEY);
+            showAuthInterface();
+        }
+
+        function loadUserProgress() {
+            if (!currentUser) return;
+
+            const today = new Date().toDateString();
+            const lastOpenedKey = getUserStorageKey(currentUser.username, 'last_opened');
+            const collectedGiftsKey = getUserStorageKey(currentUser.username, 'collected_gifts');
+            const todayOpenedKey = getUserStorageKey(currentUser.username, 'today_opened');
+            const currentDayKey = getUserStorageKey(currentUser.username, 'current_day');
+            
+            const savedGifts = localStorage.getItem(collectedGiftsKey);
+            collectedGifts = savedGifts ? JSON.parse(savedGifts) : [];
+            
+            const lastOpened = localStorage.getItem(lastOpenedKey);
+            const savedDay = localStorage.getItem(currentDayKey);
+            
+            if (savedDay !== today) {
+                todayOpened = 0;
+                localStorage.setItem(currentDayKey, today);
+                localStorage.setItem(todayOpenedKey, '0');
+            } else {
+                todayOpened = parseInt(localStorage.getItem(todayOpenedKey)) || 0;
+            }
+            
+            if (lastOpened && lastOpened !== '0') {
+                const lastOpenedTime = parseInt(lastOpened);
+                const now = Date.now();
+                const timeSinceLastOpen = now - lastOpenedTime;
+                
+                if (timeSinceLastOpen < 24 * 60 * 60 * 1000) {
+                    canOpenGift = false;
+                    cooldownEndTime = lastOpenedTime + (24 * 60 * 60 * 1000);
+                }
+            }
+            
+            updateUI();
+        }
+
+        function saveUserProgress() {
+            if (!currentUser) return;
+
+            const lastOpenedKey = getUserStorageKey(currentUser.username, 'last_opened');
+            const collectedGiftsKey = getUserStorageKey(currentUser.username, 'collected_gifts');
+            const todayOpenedKey = getUserStorageKey(currentUser.username, 'today_opened');
+            const currentDayKey = getUserStorageKey(currentUser.username, 'current_day');
+
+            localStorage.setItem(lastOpenedKey, Date.now().toString());
+            localStorage.setItem(collectedGiftsKey, JSON.stringify(collectedGifts));
+            localStorage.setItem(todayOpenedKey, todayOpened.toString());
+            localStorage.setItem(currentDayKey, new Date().toDateString());
+        }
+
+        function updateUI() {
+            openedToday.textContent = todayOpened;
+            totalOpenedElement.textContent = collectedGifts.length;
+        }
+
+        function updateProgressBar() {
+            const progress = (collectedGifts.length / gifts.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% собрано (${collectedGifts.length}/30)`;
+        }
+
+        function renderGifts() {
+            giftsContainer.innerHTML = '';
+            
+            gifts.forEach(gift => {
+                if (collectedGifts.includes(gift.id)) {
+                    const collectedElement = document.createElement('div');
+                    collectedElement.className = 'gift-collected';
+                    collectedElement.title = gift.title;
+                    
+                    // Только sobrano.svg для собранных подарков
+                    const svgElement = document.createElement('div');
+                    svgElement.className = 'gift-svg';
+                    svgElement.style.backgroundImage = `url('sobrano.svg')`;
+                    collectedElement.appendChild(svgElement);
+                    
+                    giftsContainer.appendChild(collectedElement);
+                } else {
+                    const giftElement = document.createElement('div');
+                    giftElement.className = canOpenGift ? 'gift available' : 'gift locked';
+                    giftElement.dataset.id = gift.id;
+                    
+                    if (window.innerWidth > 768) {
+                        giftElement.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+                    }
+                    
+                    if (canOpenGift) {
+                        giftElement.addEventListener('click', () => openGift(gift.id));
+                    }
+                    
+                    giftsContainer.appendChild(giftElement);
+                }
+            });
+        }
+
+        function openGift(giftId) {
+            if (!currentUser) {
+                alert('Сначала войдите в систему!');
+                return;
+            }
+
+            if (!canOpenGift) {
+                showCooldownMessage();
+                return;
+            }
+            
+            if (todayOpened >= 1) {
+                alert('Сегодня ты уже открывал подарок! Возвращайся завтра за новым сюрпризом! 🎅');
+                return;
+            }
+
+            if (collectedGifts.includes(giftId)) {
+                alert('Этот подарок уже собран! Выбери другой! 🎁');
+                return;
+            }
+            
+            const gift = gifts.find(g => g.id === giftId);
+            
+            collectedGifts.push(giftId);
+            todayOpened = 1;
+            canOpenGift = false;
+            cooldownEndTime = Date.now() + (24 * 60 * 60 * 1000);
+            
+            saveUserProgress();
+            updateUI();
+            updateProgressBar();
+            
+            const giftElement = document.querySelector(`.gift[data-id="${giftId}"]`);
+            if (giftElement) {
+                giftElement.classList.add('opened');
+                setTimeout(() => {
+                    renderGifts();
+                }, 500);
+            }
+            
+            showPrize(gift);
+        }
+
+        function showCooldownMessage() {
+            const now = Date.now();
+            const timeLeft = cooldownEndTime - now;
+            
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                alert(`Следующий подарок можно будет открыть через ${hours}ч ${minutes}м! 🕐`);
+            }
+        }
+
+        function showPrize(gift) {
+            // Устанавливаем SVG картинку вместо эмодзи
+            prizeImage.style.backgroundImage = `url('advent${gift.id}.svg')`;
+            document.getElementById('prizeTitle').textContent = gift.title;
+            document.getElementById('prizeDescription').textContent = gift.description;
+            
+            document.getElementById('prizeModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('prizeModal').style.display = 'none';
+        }
+
+        function startTimer() {
+            function updateTimer() {
+                if (!canOpenGift) {
+                    const now = Date.now();
+                    const timeLeft = cooldownEndTime - now;
+                    
+                    if (timeLeft <= 0) {
+                        canOpenGift = true;
+                        todayOpened = 0;
+                        renderGifts();
+                        updateUI();
+                        nextGiftTimer.textContent = 'Можно открыть! 🎁';
+                    } else {
+                        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        nextGiftTimer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                } else {
+                    nextGiftTimer.textContent = 'Можно открыть! 🎁';
+                }
+            }
+            
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        }
+
+        let secretClickCount = 0;
+        let secretClickTimeout = null;
+
+        function setupSecretFeature() {
+            mainTitle.addEventListener('click', handleSecretClick);
+        }
+
+        function handleSecretClick() {
+            secretClickCount++;
+            
+            if (secretClickTimeout) {
+                clearTimeout(secretClickTimeout);
+            }
+            
+            secretClickTimeout = setTimeout(() => {
+                secretClickCount = 0;
+                devTooltip.style.opacity = '0';
+            }, 3000);
+            
+            showDevTooltip(`Нажатий: ${secretClickCount}/5`);
+            
+            if (secretClickCount >= 5) {
+                activateSecretFeature();
+                secretClickCount = 0;
+            }
+        }
+
+        function showDevTooltip(message) {
+            devTooltip.textContent = message;
+            devTooltip.style.opacity = '1';
+        }
+
+        function activateSecretFeature() {
+            canOpenGift = true;
+            todayOpened = 0;
+            cooldownEndTime = Date.now();
+            
+            renderGifts();
+            updateUI();
+            
+            showDevTooltip('🎮 Режим разработчика активирован!');
+            
+            if (currentUser) {
+                const lastOpenedKey = getUserStorageKey(currentUser.username, 'last_opened');
+                const todayOpenedKey = getUserStorageKey(currentUser.username, 'today_opened');
+                localStorage.setItem(lastOpenedKey, '0');
+                localStorage.setItem(todayOpenedKey, '0');
+            }
+        }
+
+        document.getElementById('prizeModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
