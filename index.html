@@ -294,6 +294,36 @@
             background: #295b57;
         }
 
+        /* Стили для кнопок навигации */
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #295b57, #1d4139);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 140px;
+            max-width: 200px;
+            border: 2px solid #153235;
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(45deg, #1d4139, #295b57);
+            transform: scale(1.05);
+        }
+
         /* РЕЖИМ СНЕГУРОЧКИ */
         .snowgirl-mode {
             background: url('snegurka1.png') !important;
@@ -366,6 +396,16 @@
             color: #b3005e !important;
         }
 
+        .snowgirl-mode .nav-button {
+            background: linear-gradient(45deg, #ff66b2, #ff99cc) !important;
+            border: 2px solid #ff69b4;
+            color: white;
+        }
+
+        .snowgirl-mode .nav-button:hover {
+            background: linear-gradient(45deg, #ff99cc, #ff66b2) !important;
+        }
+
         .pink-confetti {
             position: fixed;
             font-size: 20px;
@@ -407,6 +447,25 @@
         <button class="mail-button" id="openFormButton">
             📮 НАПИСАТЬ ПИСЬМО
         </button>
+
+        <!-- Кнопки навигации -->
+        <div class="nav-buttons" id="navButtons">
+            <button class="nav-button" onclick="window.location.href='elka/index.html'">
+                🎄 Наряди ёлочку
+            </button>
+            <button class="nav-button" onclick="window.location.href='advent/index.html'">
+                📅 Адвент календарь
+            </button>
+            <button class="nav-button" onclick="window.location.href='diary/index.html'">
+                📖 Дневник деда мороза
+            </button>
+            <button class="nav-button" onclick="window.location.href='pechenki/index.html'">
+                🍪 Рецепт печенья
+            </button>
+            <button class="nav-button" onclick="window.location.href='vzlom/index.html'">
+                🔓 Взлом деда
+            </button>
+        </div>
 
         <!-- Форма для письма -->
         <form class="letter-form" id="letterForm">
@@ -497,10 +556,12 @@
         const mainContent = document.getElementById('mainContent');
         const secretButton = document.getElementById('secretButton');
         const backButton = document.getElementById('backButton');
+        const navButtons = document.getElementById('navButtons');
 
         openFormButton.addEventListener('click', function() {
             letterForm.style.display = 'block';
             openFormButton.style.display = 'none';
+            navButtons.style.display = 'none';
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
             closeHint(); // Закрываем подсказку при открытии формы
@@ -509,6 +570,7 @@
         closeFormButton.addEventListener('click', function() {
             letterForm.style.display = 'none';
             openFormButton.style.display = 'inline-block';
+            navButtons.style.display = 'flex';
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
             letterForm.reset();
@@ -555,12 +617,14 @@
                     // ЯВНО скрываем кнопки
                     secretButton.style.display = 'none';
                     backButton.style.display = 'none';
+                    navButtons.style.display = 'none';
                     
                     // Через 3 секунды возвращаем в исходное состояние
                     setTimeout(function() {
                         mainContent.classList.remove('clean-state');
                         successMessage.style.display = 'none';
                         openFormButton.style.display = 'inline-block';
+                        navButtons.style.display = 'flex';
                         
                         // Возвращаем кнопки в зависимости от режима
                         if (isSnowgirlMode) {
