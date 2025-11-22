@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новогодняя Ёлка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a2a1a, #1a2a0a);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: #ff6b6b;
+            text-shadow: 0 0 15px rgba(255, 107, 107, 0.7);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: #a8e6cf;
+        }
+        
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-btn {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mode-btn.active {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+        
+        .mode-btn:hover:not(.active) {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+        
+        .day-night-btn {
+            background: #ffd93d;
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 217, 61, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .day-night-btn:hover {
+            background: #ffeaa7;
+            transform: scale(1.05);
+        }
+        
+        .tree-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ff6b6b;
+            background: url('fonelka.jpg') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+        }
+        
+        .tree-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        
+        #garlandCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border-radius: 20px;
+            z-index: 5;
+            cursor: crosshair;
+        }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #ff6b6b;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .controls-title {
+            font-size: 1.8rem;
+            color: #ffd93d;
+            margin-bottom: 20px;
+        }
+        
+        .style-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .style-btn {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .style-btn.active {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+        
+        .style-btn:hover:not(.active) {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            background: #ff3366;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .action-btn:hover {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+        
+        .decorations-panel {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #ff6b6b;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .decorations-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .decoration-item {
+            font-size: 2.5rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .decoration-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.2);
+        }
+        
+        .decoration {
+            position: absolute;
+            font-size: 28px;
+            cursor: grab;
+            user-select: none;
+            z-index: 10;
+            transition: transform 0.2s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.7));
+        }
+        
+        .decoration:active {
+            cursor: grabbing;
+            transform: scale(1.2);
+        }
+        
+        @media (max-width: 768px) {
+            .tree-container {
+                height: 400px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .decoration-item {
+                font-size: 2rem;
+                width: 60px;
+                height: 60px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tree-container {
+                height: 350px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .decoration-item {
+                font-size: 1.8rem;
+                width: 50px;
+                height: 50px;
+            }
+        }
+        
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #fff;
+            font-size: 1.2rem;
+            animation: fall linear forwards;
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .drawing-instruction {
+            color: #a8e6cf;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎄 Новогодняя Ёлка 🎄</h1>
+        <p class="subtitle">Укрась ёлку гирляндой и игрушками!</p>
+        
+        <button class="day-night-btn" id="dayNightBtn">
+            🌙 Ночной режим
+        </button>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" id="garlandModeBtn">
+                💡 Режим гирлянды
+            </button>
+            <button class="mode-btn" id="toysModeBtn">
+                🎀 Режим игрушек
+            </button>
+        </div>
+        
+        <div class="tree-container" id="treeContainer">
+            <img class="tree-image" 
+                 src="https://i.postimg.cc/hhWBjCGG/vecteezy-a-3d-christmas-tree-standing-tall-with-festive-decorations-51442709.png" 
+                 alt="Новогодняя ёлка">
+            <canvas id="garlandCanvas"></canvas>
+        </div>
+        
+        <div class="controls" id="garlandControls">
+            <h2 class="controls-title">Управление гирляндой</h2>
+            <p class="drawing-instruction">Рисуй гирлянду мышью или пальцем прямо на ёлке!</p>
+            
+            <div class="style-buttons">
+                <button class="style-btn active" data-style="classic">Красная</button>
+                <button class="style-btn" data-style="blue">Синяя</button>
+                <button class="style-btn" data-style="rainbow">Радужная</button>
+                <button class="style-btn" data-style="warm">Тёплая</button>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn" id="toggleEffect">
+                    ✨ Мигание
+                </button>
+                <button class="action-btn" id="clearBtn">
+                    🧹 Очистить гирлянду
+                </button>
+            </div>
+        </div>
+        
+        <div class="decorations-panel" id="toysControls">
+            <h2 class="controls-title">Украшения для ёлки</h2>
+            
+            <div class="decorations-grid">
+                <div class="decoration-item" onclick="addDecoration('sh1.svg')"><img src="sh1.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh2.svg')"><img src="sh2.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh3.svg')"><img src="sh3.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh4.svg')"><img src="sh4.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh5.svg')"><img src="sh5.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh6.svg')"><img src="sh6.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh7.svg')"><img src="sh7.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh8.svg')"><img src="sh8.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh9.svg')"><img src="sh9.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh10.svg')"><img src="sh10.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh11.svg')"><img src="sh11.svg" style="width: 40px; height: 40px;"></div>
+                <div class="decoration-item" onclick="addDecoration('sh12.svg')"><img src="sh12.svg" style="width: 40px; height: 40px;"></div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn" onclick="clearTree()">
+                    🧹 Очистить ёлку
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переменная для режима дня/ночи
+        let isNightMode = false;
+
+        // Класс для новой гирлянды
+        class SimpleGarland {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.lights = [];
+                this.isBlinking = false;
+                this.currentStyle = 'classic';
+                this.frameCount = 0;
+                this.isDrawing = false;
+                this.lastX = 0;
+                this.lastY = 0;
+                
+                this.styles = {
+                    classic: ['#ff0000', '#ff3333', '#ff6666'],
+                    blue: ['#0066ff', '#3399ff', '#66ccff'],
+                    rainbow: ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#0066ff', '#6600ff'],
+                    warm: ['#ff9900', '#ffcc00', '#ffff66']
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.resize();
+                this.setupEventListeners();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = this.canvas.clientWidth;
+                this.canvas.height = this.canvas.clientHeight;
+            }
+            
+            setupEventListeners() {
+                // События мыши
+                this.canvas.addEventListener('mousedown', this.handleStart.bind(this));
+                this.canvas.addEventListener('mousemove', this.handleMove.bind(this));
+                this.canvas.addEventListener('mouseup', this.handleEnd.bind(this));
+                this.canvas.addEventListener('mouseleave', this.handleEnd.bind(this));
+                
+                // События касания
+                this.canvas.addEventListener('touchstart', this.handleStart.bind(this), { passive: false });
+                this.canvas.addEventListener('touchmove', this.handleMove.bind(this), { passive: false });
+                this.canvas.addEventListener('touchend', this.handleEnd.bind(this));
+            }
+            
+            handleStart(e) {
+                e.preventDefault();
+                this.isDrawing = true;
+                const pos = this.getEventPosition(e);
+                this.lastX = pos.x;
+                this.lastY = pos.y;
+                this.addLight(pos.x, pos.y);
+            }
+            
+            handleMove(e) {
+                if (!this.isDrawing) return;
+                e.preventDefault();
+                
+                const pos = this.getEventPosition(e);
+                const distance = Math.sqrt((pos.x - this.lastX) ** 2 + (pos.y - this.lastY) ** 2);
+                
+                if (distance > 15) {
+                    this.addLight(pos.x, pos.y);
+                    this.lastX = pos.x;
+                    this.lastY = pos.y;
+                }
+            }
+            
+            handleEnd() {
+                this.isDrawing = false;
+            }
+            
+            getEventPosition(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                let clientX, clientY;
+
+                if (e.type.includes('touch')) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+            
+            addLight(x, y) {
+                const colors = this.styles[this.currentStyle];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                this.lights.push({
+                    x: x,
+                    y: y,
+                    radius: 3 + Math.random() * 2,
+                    color: color,
+                    baseColor: color,
+                    brightness: 1,
+                    phase: Math.random() * Math.PI * 2,
+                    style: this.currentStyle // Сохраняем стиль для этой лампочки
+                });
+            }
+            
+            draw() {
+                // Очищаем canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Рисуем провода между лампочками
+                this.drawWires();
+                
+                // Рисуем огни
+                this.drawLights();
+            }
+            
+            drawWires() {
+                if (this.lights.length < 2) return;
+                
+                this.ctx.strokeStyle = 'rgba(200, 200, 200, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.lineCap = 'round';
+                
+                // Соединяем ближайшие точки
+                for (let i = 0; i < this.lights.length - 1; i++) {
+                    const light1 = this.lights[i];
+                    const light2 = this.lights[i + 1];
+                    const distance = Math.sqrt(
+                        Math.pow(light2.x - light1.x, 2) + Math.pow(light2.y - light1.y, 2)
+                    );
+                    
+                    if (distance < 100) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(light1.x, light1.y);
+                        this.ctx.lineTo(light2.x, light2.y);
+                        this.ctx.stroke();
+                    }
+                }
+            }
+            
+            drawLights() {
+                this.lights.forEach(light => {
+                    const brightness = this.isBlinking ? light.brightness : 1;
+                    
+                    // Основной круг
+                    this.ctx.fillStyle = light.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(light.x, light.y, light.radius * brightness, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Блик для объема
+                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(
+                        light.x - light.radius * 0.3, 
+                        light.y - light.radius * 0.3, 
+                        light.radius * 0.4, 0, Math.PI * 2
+                    );
+                    this.ctx.fill();
+                });
+            }
+            
+            update() {
+                this.frameCount++;
+                
+                if (this.isBlinking) {
+                    this.lights.forEach((light, index) => {
+                        // Мигание с разными фазами
+                        light.phase += 0.1;
+                        light.brightness = 0.6 + Math.sin(light.phase + index * 0.5) * 0.4;
+                        
+                        // Иногда меняем цвет при мигании (только в пределах своего стиля)
+                        if (Math.random() < 0.02) {
+                            const colors = this.styles[light.style];
+                            light.color = colors[Math.floor(Math.random() * colors.length)];
+                        }
+                    });
+                }
+            }
+            
+            animate() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            setStyle(style) {
+                this.currentStyle = style;
+                // Новые лампочки будут рисоваться новым цветом
+                // Старые остаются со своими цветами
+            }
+            
+            toggleBlink() {
+                this.isBlinking = !this.isBlinking;
+                if (!this.isBlinking) {
+                    // Возвращаем нормальную яркость
+                    this.lights.forEach(light => {
+                        light.brightness = 1;
+                    });
+                }
+                return this.isBlinking;
+            }
+            
+            clear() {
+                this.lights = [];
+            }
+        }
+
+        // Переменные для режимов
+        const garlandModeBtn = document.getElementById('garlandModeBtn');
+        const toysModeBtn = document.getElementById('toysModeBtn');
+        const garlandControls = document.getElementById('garlandControls');
+        const toysControls = document.getElementById('toysControls');
+        const dayNightBtn = document.getElementById('dayNightBtn');
+        const treeContainer = document.getElementById('treeContainer');
+        
+        // Переменные для игрушек
+        let decorationCount = 0;
+        let isDragging = false;
+        let currentDecoration = null;
+        let startX, startY, initialX, initialY;
+
+        // Функция переключения дня/ночи
+        function toggleDayNight() {
+            isNightMode = !isNightMode;
+            
+            if (isNightMode) {
+                treeContainer.style.backgroundImage = "url('fonelka1.jpg')";
+                dayNightBtn.textContent = '☀️ Дневной режим';
+                dayNightBtn.style.background = '#4d4d4d';
+                dayNightBtn.style.color = 'white';
+            } else {
+                treeContainer.style.backgroundImage = "url('fonelka.jpg')";
+                dayNightBtn.textContent = '🌙 Ночной режим';
+                dayNightBtn.style.background = '#ffd93d';
+                dayNightBtn.style.color = '#333';
+            }
+        }
+
+        // Инициализация при загрузке
+        let garland;
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('garlandCanvas');
+            garland = new SimpleGarland(canvas);
+            
+            // Кнопка дня/ночи
+            dayNightBtn.addEventListener('click', toggleDayNight);
+            
+            // Кнопки стилей гирлянды
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    garland.setStyle(btn.dataset.style);
+                });
+            });
+            
+            // Кнопка мигания
+            document.getElementById('toggleEffect').addEventListener('click', () => {
+                const isBlinking = garland.toggleBlink();
+                const btn = document.getElementById('toggleEffect');
+                btn.textContent = isBlinking ? '💡 Постоянно' : '✨ Мигание';
+            });
+            
+            // Кнопка очистки гирлянды
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                garland.clear();
+            });
+            
+            // Настройка переключения режимов
+            garlandModeBtn.addEventListener('click', switchToGarlandMode);
+            toysModeBtn.addEventListener('click', switchToToysMode);
+            
+            // Ресайз
+            window.addEventListener('resize', () => {
+                garland.resize();
+            });
+            
+            // Запускаем снегопад
+            setInterval(createSnowflake, 100);
+        });
+
+        // Функции для игрушек
+        function addDecoration(src) {
+            decorationCount++;
+            
+            const decoration = document.createElement('div');
+            decoration.className = 'decoration';
+            decoration.id = 'decoration-' + decorationCount;
+            
+            const img = document.createElement('img');
+            img.src = src;
+            img.style.width = '40px';
+            img.style.height = '40px';
+            decoration.appendChild(img);
+            
+            const container = document.getElementById('treeContainer');
+            const containerRect = container.getBoundingClientRect();
+            
+            const x = Math.random() * (containerRect.width - 50) + 25;
+            const y = Math.random() * (containerRect.height - 50) + 25;
+            
+            decoration.style.left = x + 'px';
+            decoration.style.top = y + 'px';
+            
+            setupDrag(decoration);
+            container.appendChild(decoration);
+        }
+        
+        function setupDrag(element) {
+            element.addEventListener('mousedown', startDrag);
+            element.addEventListener('touchstart', startDragTouch, { passive: false });
+        }
+        
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            currentDecoration = this;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialX = this.offsetLeft;
+            initialY = this.offsetTop;
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+        
+        function startDragTouch(e) {
+            e.preventDefault();
+            isDragging = true;
+            currentDecoration = this;
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            initialX = this.offsetLeft;
+            initialY = this.offsetTop;
+            
+            document.addEventListener('touchmove', dragTouch, { passive: false });
+            document.addEventListener('touchend', stopDrag);
+        }
+        
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            
+            currentDecoration.style.left = (initialX + dx) + 'px';
+            currentDecoration.style.top = (initialY + dy) + 'px';
+        }
+        
+        function dragTouch(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            const dx = touch.clientX - startX;
+            const dy = touch.clientY - startY;
+            
+            currentDecoration.style.left = (initialX + dx) + 'px';
+            currentDecoration.style.top = (initialY + dy) + 'px';
+        }
+        
+        function stopDrag() {
+            isDragging = false;
+            currentDecoration = null;
+            
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', dragTouch);
+            document.removeEventListener('touchend', stopDrag);
+        }
+        
+        function clearTree() {
+            document.querySelectorAll('.decoration').forEach(decoration => {
+                decoration.remove();
+            });
+            decorationCount = 0;
+        }
+        
+        function switchToGarlandMode() {
+            garlandModeBtn.classList.add('active');
+            toysModeBtn.classList.remove('active');
+            garlandControls.style.display = 'block';
+            toysControls.style.display = 'none';
+            garland.canvas.style.pointerEvents = 'auto';
+            
+            document.querySelectorAll('.decoration').forEach(decoration => {
+                decoration.style.pointerEvents = 'none';
+            });
+        }
+        
+        function switchToToysMode() {
+            toysModeBtn.classList.add('active');
+            garlandModeBtn.classList.remove('active');
+            garlandControls.style.display = 'none';
+            toysControls.style.display = 'block';
+            garland.canvas.style.pointerEvents = 'none';
+            
+            document.querySelectorAll('.decoration').forEach(decoration => {
+                decoration.style.pointerEvents = 'auto';
+            });
+        }
+        
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.innerHTML = '❄';
+            snowflake.classList.add('snowflake');
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random();
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.body.appendChild(snowflake);
+            
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
